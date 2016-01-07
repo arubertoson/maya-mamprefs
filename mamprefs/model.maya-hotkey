@@ -69,6 +69,6 @@
     {"name": "window_scripteditor", "keys": ["8"], "command": "mamtools.display.view_script_editor()"},
     {"name": "window_renderview", "keys": ["9"], "command": "mamtools.display.view_render()"},
 
-    {"name": "pie_delete", "keys": ["q"], "command": "maya_prefs.show_menu('pm_delete')"},
-    {"name": "pie_delete_release", "keys": ["q", "release"], "command": "maya_prefs.hide_menu()"},
+    {"name": "pie_delete", "keys": ["q"], "command": "mamprefs.show_menu('delete')"},
+    {"name": "pie_delete_release", "keys": ["q", "release"], "command": "mamprefs.hide_menu()"},
 ]

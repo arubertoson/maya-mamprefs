@@ -3,13 +3,24 @@
     {
         "colorIndex":
         [
+            [6, 0.2, 0.4, 1.0],
+            [13, 0.9, 0.2, 0.2],
+            [14, 0.2, 0.8, 0.2],
+            # [15, 0.2, 0.4, 1.0],
+            [17, 1.0, 1.0, 0.4],
+            [18, 0.4, 1.0, 1.0],
+
             [24, 0.6, 0.6, 0.6],  # background
             [25, 0.72, 0.72, 0.72],  # wireframe object
             [26, 1.0, 0.66, 0.16],  # selection
             [27, 0.55, 0.71, 0.78],  # preselect highlight
-            [28, 0.76, 0.8, 0.85],  # Viewport labels
+            # [28, 0.76, 0.8, 0.85],  # Viewport labels
             [29, 1.0, 0.78, 0.28],  # Viewport text
             [30, 0.8, 0.6, 1.0],  # instance objcets
+            [31, 0.9, 0.2, 0.2],  # x axis
+            [32, 0.2, 0.8, 0.2],  # y axis
+            [33, 0.2, 0.4, 1.0],  # z axis
+            [34, 1.0, 1.0, 0.4],  # current axis
         ]
     },
     {
@@ -30,6 +41,7 @@
             ["hiliteComponent", 24, {"active": True}],
 
             # Inactive colors
+
             # Objects
             ["surface", 24, {"dormant": True}],
             ["polymesh", 1, {"dormant": True}],
@@ -37,7 +49,7 @@
             ["curveOnSurface", 25, {"dormant": True}],
 
             ["headsUpDisplayLabels", 29, {"dormant": True}],
-            ["headsUpDisplayValues", 28, {"dormant": True}],
+            ["headsUpDisplayValues", 25, {"dormant": True}],
 
             ["gridAxis", 1, {"dormant": True}],
             ["grid", 2, {"dormant": True}],

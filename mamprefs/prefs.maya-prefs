@@ -12,6 +12,29 @@
         ]
     },
     {
+        "manipOptions":
+        [
+            {
+                "showPlaneHandles": False,
+                "rememberActiveHandle": False,
+                "handleSize": 40,
+                "lineSize": 2,
+                "linePick": 4,
+            },
+        ]
+    },
+    {
+        "polyOptions":
+        [
+            {
+                "gl": True,
+                "displayBorder": True,
+                "wireBackCulling": True,
+                "sizeBorder": 4.0,
+            }
+        ]
+    },
+    {
         "currentUnit":
         [
             {"linear": "cm"},
@@ -46,7 +69,6 @@
         ]
     },
     {
-        # TODO: make function to call global mel variables.
         "mel":
         [
             "$gUseSaveScenePanelConfig = false;file -uc false;",
@@ -54,10 +76,15 @@
             "$gUseNewScenePanelConfig = false;",
             "viewManip -visible off; optionVar -iv viewCubeShowCube 0;",
             # Command line hold focus,
-            "optionVar -iv commandLineHoldFocus true; commandLine -e -holdFocus 1 $gCommandLine;",
-            "optionVar -iv autoSaveEnable true;autoSave -en true;int $autoSaveDestination = (`optionVar -q autoSaveDestination` == 1);",
-            "optionVar -iv autoSaveLimitBackups true; autoSave -limitBackups true;",
+            ("optionVar -iv commandLineHoldFocus true; commandLine -e "
+             "-holdFocus 1 $gCommandLine;"),
+            ("optionVar -iv autoSaveEnable true;autoSave -en true;int "
+             "$autoSaveDestination = (`optionVar -q autoSaveDestination` "
+             "== 1);"),
+            ("optionVar -iv autoSaveLimitBackups true; autoSave"
+             "-limitBackups true;"),
             "optionVar -iv autoSaveMaxBackups 3; autoSave -maxBackups 3;",
+            "setPolyCountVisibility(1);",
         ]
     },
     {
@@ -82,8 +109,12 @@
         "optionVar":
         [
 
-            {"sv": ["ViewImageDir", "C:/Program Files/XnViewMP/xnviewmp.exe"]},  # View
-            {"sv": ["PhotoshopDir", "C:/Program Files/Adobe/Adobe Photoshop CC 2014/Photoshop.exe"]},  # photoshop
+            {"sv": ["ViewImageDir",
+                    "C:/Program Files/XnViewMP/xnviewmp.exe"]
+                    },  # View
+            {"sv": ["PhotoshopDir",
+                    "C:/Program Files/Adobe/Adobe Photoshop CC 2014/Photoshop.exe"]
+                    },  # photoshop
 
             {"sv": ["workingUnitLinear", "cm"]},  # Units
             {"sv": ["workingUnitLinearDefault", "cm"]},  # Units

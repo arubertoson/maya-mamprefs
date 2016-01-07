@@ -1,23 +1,23 @@
 [
     {
-        "pm_delete":
+        "delete":
         [
-            {"label": "history", "command": "print('bye')", "position": "N"},
-            {"label": "pease", "command": "print('hello')", "position": "S"},
-            {"label": "pease", "sub_menu": True, "command": "print('hello')", "position": "W"},
-                {"label": "pease", "command": "print('hello')", "position": "S"},
+            {"label": "history", "command": "print('history')", "position": "N"},
+            {"label": "something", "command": "print('hello')", "position": "S"},
+            {"label": "different", "sub_menu": True, "command": "print('hello')", "position": "W"},
+                {"label": "of course", "command": "print('hello')", "position": "S"},
                 {"label": "pease", "command": "print('hello')", "position": "E"},
                 {"set_parent": True},
         ]
     },
     {
-        "pm_select":
+        "select":
         [
             {"label": "coplanar", "command": "print('hello')", "position": "SE"},
         ]
     },
     {
-        "pm_scripts":
+        "scripts":
         [
             {"label": "coplanar", "sub_menu": True, "command": "print('hello')"},
                 # coplanar submenu
