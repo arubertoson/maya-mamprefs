@@ -1,0 +1,32 @@
+[
+    {
+        "pm_delete":
+        [
+            {"label": "history", "command": "print('bye')", "position": "N"},
+            {"label": "pease", "command": "print('hello')", "position": "S"},
+            {"label": "pease", "sub_menu": True, "command": "print('hello')", "position": "W"},
+                {"label": "pease", "command": "print('hello')", "position": "S"},
+                {"label": "pease", "command": "print('hello')", "position": "E"},
+                {"set_parent": True},
+        ]
+    },
+    {
+        "pm_select":
+        [
+            {"label": "coplanar", "command": "print('hello')", "position": "SE"},
+        ]
+    },
+    {
+        "pm_scripts":
+        [
+            {"label": "coplanar", "sub_menu": True, "command": "print('hello')"},
+                # coplanar submenu
+                {"label": "Test", "command": "print('gbue')"},
+                {"set_parent": True},
+
+            {"label": "coplanar", "command": "print('hello')"},
+            {"label": "coplanar", "command": "print('hello')"},
+            {"label": "coplanar", "command": "print('hello')"}
+        ]
+    },
+]
