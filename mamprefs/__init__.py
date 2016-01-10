@@ -13,7 +13,8 @@ __copyright__ = 'Copyright 2015 Marcus Albertsson'
 # Module imports
 import logging
 
-from mamprefs import base, settings, hotkeys, markingmenus, constants
+from mamprefs import (base, settings, hotkeys, markingmenus, constants,
+                      layouts)
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +33,7 @@ def init(*args):
     settings.init()
     hotkeys.init()
     markingmenus.init()
+    layouts.init()
 
 
 def show_menu(menu):
