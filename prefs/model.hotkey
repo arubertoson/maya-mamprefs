@@ -64,7 +64,8 @@
     # {"name": "tool_renamer", "keys": ["F2"], "command": "arenamer.Renamer().run()"},
 
     # # Window Toggles
-    {"name": "window_outliner", "keys": ["6"], "command": "mamtools.display.view_outliner()"},
+    {"name": "window_outliner", "keys": ["6"], "command": "mamtools.display.view_outliner(False)"},
+    {"name": "window_outliner_floating", "keys": ["^"], "command": "mamtools.display.view_outliner(True)"},
     {"name": "window_hypershader", "keys": ["7"], "command": "mamtools.display.view_hypershader()"},
     {"name": "window_scripteditor", "keys": ["8"], "command": "mamtools.display.view_script_editor()"},
     {"name": "window_renderview", "keys": ["9"], "command": "mamtools.display.view_render()"},

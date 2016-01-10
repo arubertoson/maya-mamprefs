@@ -28,7 +28,7 @@ class MarkingMenuManager(base.BaseManager):
     instance = None
 
     def __init__(self):
-        super(MarkingMenuManager, self).__init__('.maya-markingmenu')
+        super(MarkingMenuManager, self).__init__('.markingmenu')
 
     def __getitem__(self, key):
         for menu_list in self.map.itervalues():

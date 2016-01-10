@@ -87,7 +87,7 @@ class SettingManager(base.BaseManager):
 
     def __init__(self):
         self.shading_group_job = None
-        super(SettingManager, self).__init__('.maya-prefs')
+        super(SettingManager, self).__init__('.prefs')
 
     def initUI(self):
         """

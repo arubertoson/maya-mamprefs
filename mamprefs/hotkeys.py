@@ -1,4 +1,5 @@
 """
+.. todo:: indicator that a double name exists in file.
 """
 import re
 import logging
@@ -23,7 +24,7 @@ class HotkeyManager(base.BaseManager):
     def __init__(self):
         current_set = cmds.optionVar(q=HOTKEY_CURRENT_SET)
         self.active = current_set if current_set else ''
-        super(HotkeyManager, self).__init__('.maya-hotkey')
+        super(HotkeyManager, self).__init__('.hotkey')
 
     def _add_menu_items(self):
         for item in self.map:
