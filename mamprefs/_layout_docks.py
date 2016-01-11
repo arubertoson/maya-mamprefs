@@ -49,3 +49,7 @@ def script_output(direction):
         floating=False,
         allowedArea=['left', 'right']
         )
+
+
+if __name__ == '__main__':
+    pass

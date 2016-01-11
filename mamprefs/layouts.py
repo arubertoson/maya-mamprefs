@@ -9,6 +9,7 @@ from maya import cmds, mel
 
 from mamprefs import base
 from mamprefs import _layout_docks
+from mamprefs._layout_docks import script_output
 from mamprefs.constants import *
 
 logger = logging.getLogger(__name__)
@@ -106,7 +107,8 @@ class LayoutManager(base.BaseManager):
             self.map.setdefault(file_name, {})
             for d in file_map:
                 for name, kw in d.iteritems():
-                    self.map[file_name][name] = Layout(name, **kw)
+                    self.map[file_name][name] = Layout(name, file_name,
+                                                       **kw)
 
 
 class Layout(object):
@@ -115,8 +117,9 @@ class Layout(object):
 
     Container for different layout arguments.
     """
-    def __init__(self, name, **kwargs):
+    def __init__(self, name, file_name, **kwargs):
         self.name = name
+        self.file_name = file_name
         self.visible_name = name.replace('_', ' ').title()
         self.layout_string = textwrap.dedent(kwargs.get('layout'))
 
@@ -138,6 +141,8 @@ class Layout(object):
         Load current layout.
         """
         reset_screen()
+        active = '{} {}'.format(self.file_name, self.name)
+        cmds.optionVar(sv=(ACTIVE_LAYOUT, active))
 
         if cmds.getPanel(cwl=self.visible_name) is None:
             mel.eval(self.layout)
@@ -156,7 +161,11 @@ def init():
     if LayoutManager.instance is None:
         LayoutManager.instance = LayoutManager()
 
+    # Launch layout from last session
     LayoutManager.instance.initUI()
+    if cmds.optionVar(ex=ACTIVE_LAYOUT):
+        file_, active = cmds.optionVar(q=ACTIVE_LAYOUT).split(' ')
+        LayoutManager.instance[file_][active].load()
 
 
 if __name__ == '__main__':
