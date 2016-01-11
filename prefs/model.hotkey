@@ -67,7 +67,9 @@
     {"name": "window_outliner", "keys": ["6"], "command": "mamtools.display.view_outliner(False)"},
     {"name": "window_outliner_floating", "keys": ["^"], "command": "mamtools.display.view_outliner(True)"},
     {"name": "window_hypershader", "keys": ["7"], "command": "mamtools.display.view_hypershader()"},
+
     {"name": "window_scripteditor", "keys": ["8"], "command": "mamtools.display.view_script_editor()"},
+    {"name": "window_scriptoutput", "keys": ["*"], "command": "mamprefs.layouts.script_output('bottom')"},
     {"name": "window_renderview", "keys": ["9"], "command": "mamtools.display.view_render()"},
 
     {"name": "pie_delete", "keys": ["q"], "command": "mamprefs.show_menu('delete')"},

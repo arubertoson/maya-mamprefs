@@ -4,10 +4,10 @@
         [
             {
                 "size": 20,
-                "spacing": 4,
-                "divisions": 4,
+                "spacing": 5,
+                "divisions": 5,
                 "displayAxesBold": False,
-                "displayDivisionLines": False,
+                "displayDivisionLines": True,
             }
         ]
     },
@@ -19,7 +19,8 @@
                 "rememberActiveHandle": False,
                 "handleSize": 40,
                 "lineSize": 2,
-                "linePick": 4,
+                "linePick": 2,
+                "pointSize": 6,
             },
         ]
     },
@@ -27,7 +28,7 @@
         "polyOptions":
         [
             {
-                "gl": True,
+                "newPolymesh": True,
                 "displayBorder": True,
                 "wireBackCulling": True,
                 "sizeBorder": 4.0,
@@ -89,8 +90,8 @@
     {
         "mel":
         [
-            "$gUseSaveScenePanelConfig = false;file -uc false;",
-            "$gUseScenePanelConfig = false;file -uc false;",
+            # "$gUseSaveScenePanelConfig = false;file -uc false;",
+            # "$gUseScenePanelConfig = false;file -uc false;",
             "$gUseNewScenePanelConfig = false;",
             "viewManip -visible off; optionVar -iv viewCubeShowCube 0;",
             # Command line hold focus,
@@ -180,8 +181,8 @@
             {"iv": ["FileDialogStyle", 1]},  # System file dialog
             {"iv": ["polyCreateMeshesSingleSided", 1]},
             {"iv": ["polyAutoConvertAction", 0]},
-            {"iv": ["saveActionsPreferences", 0]},  # Don't save prefs
-            {"iv": ["saveActionsScriptEditor", 0]},  # Don't save script editor
+            # {"iv": ["saveActionsPreferences", 0]},  # Don't save prefs
+            # {"iv": ["saveActionsScriptEditor", 0]},  # Don't save script editor
             {"iv": ["polyAutoConvertAction", 0]},
             {"iv": ["commandLineHoldFocus", 1]},
             {"iv": ["ResetModelViewsOnNewScene", 0]},
