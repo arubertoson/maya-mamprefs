@@ -13,6 +13,7 @@ __copyright__ = 'Copyright 2015 Marcus Albertsson'
 # Module imports
 import logging
 
+import maya.cmds as cmds
 from mamprefs import (base, settings, hotkeys, markingmenus, constants,
                       layouts)
 
@@ -29,11 +30,12 @@ def init(*args):
         for i in args:
             constants.CONFIG_PATHS.append(i)
 
-    # Init scripts
-    settings.init()
-    hotkeys.init()
-    markingmenus.init()
-    layouts.init()
+    if cmds.optionVar(q=constants.CUSTOM_SETTING_STATE):
+        # Init scripts
+        settings.init()
+        hotkeys.init()
+        markingmenus.init()
+        layouts.init()
 
 
 def show_menu(menu):
