@@ -7,13 +7,14 @@ from functools import partial
 
 from maya import cmds
 
-from mamprefs import base
-from mamprefs.constants import *
+from mamprefs import _config
+from mamprefs.base import BaseManager, deleteUI, file_to_pyobject
+
 
 logger = logging.getLogger(__name__)
 
 
-class HotkeyManager(base.BaseManager):
+class HotkeyManager(BaseManager):
     """
     Main hotkey switcher class.
 
@@ -22,14 +23,16 @@ class HotkeyManager(base.BaseManager):
     instance = None
 
     def __init__(self):
-        current_set = cmds.optionVar(q=HOTKEY_CURRENT_SET)
-        self.active = current_set if current_set else ''
+        current_set = _config['CURRENT_HOTKEY_NAME']
+        self.active = current_set if current_set else None
         super(HotkeyManager, self).__init__('.hotkey')
 
     def _add_menu_items(self):
         for item in self.map:
-            cmds.menuItem(l=item.title(), c=partial(self.read_and_set_hotkeys,
-                                                    item))
+            cmds.menuItem(
+                l=item.title(),
+                c=partial(self.read_and_set_hotkeys, item)
+                )
             cmds.menuItem(ob=True, c=partial(self.edit, item))
 
     def initUI(self):
@@ -38,30 +41,36 @@ class HotkeyManager(base.BaseManager):
         """
         super(HotkeyManager, self).initUI()
 
+        # menu names
+        hotkey_menu_name = _config['MENU_HOTKEY_NAME']
+        main_menu_name = _config['MENU_MAIN_NAME']
+
         # Delete UI element if they exists.
-        base.deleteUI(HOTKEY_MENU_NAME)
+        deleteUI(hotkey_menu_name)
 
         # Create the UI
         cmds.menuItem(
-            HOTKEY_MENU_NAME,
-            label='Hotkey Set',
+            hotkey_menu_name,
+            label='Hotkeys',
             subMenu=True,
             allowOptionBoxes=True,
             insertAfter='',
-            parent=MAIN_MENU,
+            parent=main_menu_name,
             tearOff=True
             )
         cmds.menuItem(l='Update', c=lambda *args: self.reload_hotkeys())
         cmds.menuItem(divider=True)
         self._add_menu_items()
         cmds.menuItem(divider=True)
-        cmds.menuItem(l='Maya Default', c=lambda *args:
-                      self.reset_hotkeys_to_factory())
+        cmds.menuItem(
+            l='Maya Default',
+            c=lambda *args: self.reset_hotkeys_to_factory()
+            )
         cmds.menuItem(l='Print Current', c=lambda *args: self.output())
 
     def parse_files(self):
         for file_name, f in self.files.iteritems():
-            file_map = base.file_to_pyobject(f)
+            file_map = file_to_pyobject(f)
             self.map[file_name] = [Hotkey(file_name, **i) for i in file_map]
 
     def clean(self):
@@ -78,7 +87,7 @@ class HotkeyManager(base.BaseManager):
 
     def reload_hotkeys(self, *args):
         self.reload()
-        if self.active:
+        if self.active is not None:
             cmds.hotkey(factorySettings=True)
             self.read_and_set_hotkeys(self.active)
         self.initUI()
@@ -87,14 +96,14 @@ class HotkeyManager(base.BaseManager):
         """
         Set hotkeys back to Maya factory.
         """
-        self.active = ''; cmds.hotkey(factorySettings=True)
+        _config['CURRENT_HOTKEY_NAME'] = self.active = None
+        cmds.hotkey(factorySettings=True)
 
     def read_and_set_hotkeys(self, keyset, *args):
         """
         Set hotkeys to given key set under given category.
         """
-        self.active = keyset
-        cmds.optionVar(sv=(HOTKEY_CURRENT_SET, keyset))
+        _config['CURRENT_HOTKEY_NAME'] = self.active = keyset
         for key in self.map[keyset]:
             cmds.hotkey(**key.keyargs)
 
@@ -127,7 +136,7 @@ class Hotkey(object):
         self.name = '{}_{}'.format(category, name)
         self.keys = list(keys)
         self.keyargs = self.parse_hotkey(keys)
-        self.script_type = script_type or USE_PYTHON
+        self.script_type = script_type or _config['USE_PYTHON']
 
         # Commands
         self.command = self.parse_command(command)
@@ -140,21 +149,24 @@ class Hotkey(object):
         """
         Creates the runtime command and bind a name command to it.
         """
+        # UI element names
+        main_menu = _config['MENU_MAIN_NAME']
+
         if not cmds.runTimeCommand(self.name, q=True, exists=True):
             cmds.runTimeCommand(
                 self.name,
                 annotation=self.name,
                 command=command,
-                category=MAIN_MENU_NAME,
+                category=main_menu,
                 commandLanguage=self.script_type,
-            )
+                )
 
         cmds.nameCommand(
             self.name,
             ann=self.name,
             c=self.name,
             sourceType=self.script_type,
-        )
+            )
 
     def parse_command(self, command):
         """
@@ -201,4 +213,4 @@ def init():
 
 
 if __name__ == '__main__':
-    init()
+    pass

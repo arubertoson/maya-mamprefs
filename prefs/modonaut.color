@@ -1,6 +1,12 @@
 [
     # Display
     {
+        "displayPref":
+        [
+            {"displayGradient": False},
+        ]
+    },
+    {
         "colorIndex":
         [
             [6, 0.2, 0.4, 1.0],

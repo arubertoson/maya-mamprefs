@@ -1,10 +1,15 @@
 """
 """
+import logging
 from functools import partial
+
 from maya import cmds
 
-from mamprefs import base
-from mamprefs.constants import *
+from mamprefs import _config
+from mamprefs.base import BaseManager, deleteUI, file_to_pyobject
+
+
+logger = logging.getLogger(__name__)
 
 
 def get_parent_panel():
@@ -22,7 +27,7 @@ def get_parent_panel():
             return 'viewPanes'
 
 
-class MarkingMenuManager(base.BaseManager):
+class MarkingMenuManager(BaseManager):
     """
     """
     instance = None
@@ -45,7 +50,10 @@ class MarkingMenuManager(base.BaseManager):
         cmds.menuItem(divider=True)
         for file_name, menu_list in self.map.iteritems():
             for menu in menu_list:
-                cmds.menuItem(l=menu.name.title(), c=partial(self.output, menu))
+                cmds.menuItem(
+                    l=menu.name.title(),
+                    c=partial(self.output, menu),
+                    )
                 cmds.menuItem(ob=True, c=partial(self.edit, file_name))
         cmds.menuItem(divider=True)
 
@@ -55,17 +63,22 @@ class MarkingMenuManager(base.BaseManager):
         """
         super(MarkingMenuManager, self).initUI()
 
+        # UI element names
+        main_menu = _config['MENU_MAIN_NAME']
+        marking_menu = _config['MENU_MARKING_NAME']
+        layout_menu = _config['MENU_LAYOUT_NAME']
+
         # Delete UI elements if they exists.
-        base.deleteUI(MARKING_MENU_NAME)
+        deleteUI(marking_menu)
 
         # Create the UI
         cmds.menuItem(
-            MARKING_MENU_NAME,
-            label='Marking Menu',
+            marking_menu,
+            label='Marking Menus',
             subMenu=True,
             allowOptionBoxes=True,
-            insertAfter=HOTKEY_MENU_NAME,
-            parent=MAIN_MENU,
+            insertAfter=layout_menu,
+            parent=main_menu,
             tearOff=True,
             )
         cmds.menuItem(l='Update', c=lambda *args: self.reload_marking_menus())
@@ -78,7 +91,7 @@ class MarkingMenuManager(base.BaseManager):
 
     def parse_files(self):
         for file_name, f in self.files.iteritems():
-            file_map = base.file_to_pyobject(f)
+            file_map = file_to_pyobject(f)
             self.map[file_name] = [
                 MarkingMenu(name, item)
                 for menu in file_map
@@ -89,13 +102,14 @@ class MarkingMenuManager(base.BaseManager):
         """
         Rebuild menus and re-parse files. Then rebuild the UI.
         """
-        self.reload(); self.initUI()
+        self.reload()
+        self.initUI()
 
     def clean_menu(self):
         """
         .. note:: Might be redundant.
         """
-        base.deleteUI(MARKING_MENU_POPUP_NAME)
+        deleteUI(_config['MENU_MARKING_POPUP_NAME'])
 
     def output(self, menu, *args):
         """
@@ -131,7 +145,7 @@ class MarkingMenu(object):
         """
         Creates menu items.
         """
-        cmds.popupMenu(MARKING_MENU_POPUP_NAME, b=1, mm=True,
+        cmds.popupMenu(_config['MENU_MARKING_POPUP_NAME'], b=1, mm=True,
                        parent=get_parent_panel())
         for item in self.items:
             if 'set_parent' in item:
@@ -143,7 +157,8 @@ class MarkingMenu(object):
         """
         Shows marking menu on hotkey press.
         """
-        base.deleteUI(MARKING_MENU_POPUP_NAME); self.build_menu()
+        deleteUI(_config['MENU_MARKING_POPUP_NAME'])
+        self.build_menu()
 
 
 class MarkingMenuItem(object):
@@ -215,6 +230,22 @@ def init():
         MarkingMenuManager.instance = MarkingMenuManager()
 
     MarkingMenuManager.instance.initUI()
+
+
+def show_menu(menu):
+    MM = MarkingMenuManager
+    if MM.instance is None:
+        MM.instance = MM()
+
+    try:
+        MM.instance[menu].show()
+    except KeyError:
+        logger.error('{} is not in manager.'.format(menu))
+
+
+def hide_menu():
+    deleteUI(_config['MENU_MARKING_POPUP_NAME'])
+
 
 if __name__ == '__main__':
     init()

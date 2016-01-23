@@ -2,21 +2,25 @@
 """
 from maya import cmds
 
-from mamprefs.constants import *
+from mamprefs import _config
+
 
 __all__ = ['script_output']
 
 
 def script_output(direction):
     """
+    Script output dock for layouts.
     """
-    if cmds.dockControl(SCRIPT_OUTPUT_DOCK, ex=True):
-        return cmds.dockControl(SCRIPT_OUTPUT_DOCK, e=True, vis=True, fl=False)
+    dock_control = _config['WINDOW_SCRIPT_OUTPUT_DOCK']
+    dock_window = _config['WINDOW_SCRIPT_OUTPUT']
+    if cmds.dockControl(dock_control, ex=True):
+        return cmds.dockControl(dock_control, e=True, vis=True, fl=False)
 
-    if cmds.window(SCRIPT_OUTPUT_WINDOW, ex=True):
-        main_win = SCRIPT_OUTPUT_WINDOW
+    if cmds.window(dock_window, ex=True):
+        main_win = dock_window
     else:
-        main_win = cmds.window(SCRIPT_OUTPUT_WINDOW, title='Output Window')
+        main_win = cmds.window(dock_window, title='Output Window')
 
     cmds.paneLayout(parent=main_win)
 
@@ -41,7 +45,7 @@ def script_output(direction):
     )
 
     cmds.dockControl(
-        SCRIPT_OUTPUT_DOCK,
+        dock_control,
         content=main_win,
         label='Output Window',
         area=direction,

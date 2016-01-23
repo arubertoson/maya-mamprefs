@@ -58,12 +58,6 @@
         ]
     },
     {
-        "displayPref":
-        [
-            {"displayGradient": False},
-        ]
-    },
-    {
         "file":
         [
             {"uiConfiguration": False},
@@ -175,13 +169,16 @@
                     "C:/Program Files/Adobe/Adobe Photoshop CC 2014/Photoshop.exe"]
                     },  # photoshop
 
+            {"sv": ["InitialProject", "G:/project/maya_base"]},  # Units
+            {"sv": ["ProjectsDir", "G:/project/maya_base"]},  # Units
+
             {"sv": ["workingUnitLinear", "cm"]},  # Units
             {"sv": ["workingUnitLinearDefault", "cm"]},  # Units
             {"iv": ["vp2RenderingEngineMenu", 10]},  # DirectX 11
             {"iv": ["FileDialogStyle", 1]},  # System file dialog
             {"iv": ["polyCreateMeshesSingleSided", 1]},
             {"iv": ["polyAutoConvertAction", 0]},
-            # {"iv": ["saveActionsPreferences", 0]},  # Don't save prefs
+            {"iv": ["saveActionsPreferences", 0]},  # Don't save prefs
             # {"iv": ["saveActionsScriptEditor", 0]},  # Don't save script editor
             {"iv": ["polyAutoConvertAction", 0]},
             {"iv": ["commandLineHoldFocus", 1]},

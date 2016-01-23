@@ -2,12 +2,15 @@
     # Tools
     {"name": "tools_select", "keys": ["space"], "command": "mamtools.utils.tool_select()"},
     {"name": "tools_select_release", "keys": ["space", "release"], "command": "mamtools.utils.tool_select(True)"},
+    {"name": "tools_pivot_control", "keys": ["s"], "command": "maya.mel.eval('dR_customPivotToolPress')"},
+    {"name": "tools_pivot_control_release", "keys": ["s", "release"], "command": "maya.mel.eval('dR_customPivotToolPress')"},
 
     # Selection Masks
     {"name": "mask_vertex", "keys": ["1"], "command": "mamtools.utils.select_mode('vert')"},
     {"name": "mask_edge", "keys": ["2"], "command": "mamtools.utils.select_mode('edge')"},
     {"name": "mask_face", "keys": ["3"], "command": "mamtools.utils.select_mode('face')"},
     {"name": "mask_map", "keys": ["4"], "command": "mamtools.utils.select_mode('meshuv')"},
+    {"name": "mask_toggle", "keys": ["ctrl+space"], "command": "mamtools.utils.select_mode_toggle()"},
 
     # Selection Converts
     {"name": "to_vertex", "keys": ["alt+1"], "command": "mamtools.utils.convert('vert')"},
@@ -20,7 +23,7 @@
     {"name": "to_bface", "keys": ["alt+#"], "command": "mamtools.utils.convert('face', border=True)"},
     {"name": "to_bmap", "keys": ["alt+$"], "command": "mamtools.utils.convert('meshuv', border=True)"},
 
-    {"name": "select_deselect", "keys": ["ctrl+space"], "command": "mamtools.select.clear()"},
+    # {"name": "select_deselect", "keys": ["ctrl+space"], "command": "mamtools.select.clear()"},
     {"name": "select_deselect_that", "keys": ["ctrl+alt+space"], "command": "mamtools.select.clear_mesh_or_loop()"},
     {"name": "select_expand", "keys": ["W"], "command": "mamtools.select.traverse(True)"},
     {"name": "select_contract", "keys": ["Q"], "command": "mamtools.select.traverse(False)"},
@@ -29,14 +32,13 @@
 
     # Delete functions
     {"name": "delete_delete", "keys": ["d"], "command": "mamtools.delete.delete(True)"},
-    {"name": "delete_merge", "keys": ["D"], "command": "mamtools.delete.merge()"},
+    {"name": "delete_merge", "keys": ["D"], "command": "mamtools.merge()"},
     {"name": "delete_collapse", "keys": ["ctrl+d"], "command": "mamtools.delete.collapse()"},
     {"name": "delete_remove", "keys": ["ctrl+D"], "command": "mamtools.delete.delete(False)"},
 
     # Duplicate/Copy commands
-    {"name": "mesh_cut", "keys": ["ctrl+x"], "command": "mamtools.mesh.detach(extract=True)"},
-    {"name": "mesh_copy", "keys": ["ctrl+v"], "command": "mamtools.mesh.detach(hierarchy=True)"},
-
+    {"name": "mesh_cut", "keys": ["ctrl+x"], "command": "mamtools.api.detach(extract=True)"},
+    {"name": "mesh_copy", "keys": ["ctrl+v"], "command": "mamtools.api.detach(extract=False)"},
 
     # Camera Controls, voewport
     {"name": "viewport_snap", "keys": ["F"], "command": "mamtools.camera.viewport_snap()"},
@@ -68,8 +70,8 @@
     {"name": "window_outliner_floating", "keys": ["^"], "command": "mamtools.display.view_outliner(True)"},
     {"name": "window_hypershader", "keys": ["7"], "command": "mamtools.display.view_hypershader()"},
 
-    {"name": "window_scripteditor", "keys": ["8"], "command": "mamtools.display.view_script_editor()"},
-    {"name": "window_scriptoutput", "keys": ["*"], "command": "mamprefs.layouts.script_output('bottom')"},
+    {"name": "window_scripteditor", "keys": ["8"], "command": "mamtools.display.view_script_editor(floating=True)"},
+    {"name": "window_scriptoutput", "keys": ["*"], "command": "mamprefs.display.view_script_editor(floating=False)"},
     {"name": "window_renderview", "keys": ["9"], "command": "mamtools.display.view_render()"},
 
     {"name": "pie_delete", "keys": ["q"], "command": "mamprefs.show_menu('delete')"},
