@@ -26,44 +26,10 @@ def toggle_inital_shader_group(state=None):
     return _state
 
 
-def script_job_exists(jobnum, event):
-    """
-    This is too general of a function, should probablyh be moved to mampy.
-
-    .. todo:: move to mampy
-    """
-    if not cmds.scriptJob(exists=jobnum):
-        return False
-    for i in cmds.scriptJob(lj=True):
-        if i.startswith(str(jobnum)) and str(event) in i:
-            return True
-    return False
-
-
 def override_inital_shading_group():
     """
     Create a custom material for the initial shading group.
     """
-    def create_script_job():
-        jobnum = _config['CURRENT_INIT_SHADER_OVERRIDE_JOBNUM']
-        event = (
-            'NewSceneOpened',
-            '{}; {}'.format(
-                'import mamprefs',
-                'mamprefs.settings.toggle_inital_shader_group(True)'),
-            )
-        if jobnum is None or not script_job_exists(jobnum, event):
-            jobnum = cmds.scriptJob(protected=True, event=event)
-            _config['CURRENT_INIT_SHADER_OVERRIDE_JOBNUM'] = jobnum
-            logger.debug('Creating {}'.format(jobnum))
-
-    def kill_script_job():
-        jobnum = _config['CURRENT_INIT_SHADER_OVERRIDE_JOBNUM']
-        if jobnum:
-            cmds.scriptJob(kill=jobnum, f=True)
-            _config['CURRENT_INIT_SHADER_OVERRIDE_JOBNUM'] = None
-            logger.debug('Killing {}'.format(jobnum))
-
     # states
     state = _config['STATE_INIT_SHADER_OVERRIDE']
     mat_name = _config['CURRENT_INIT_SHADER_OVERRIDE_MATNAME']
@@ -80,7 +46,6 @@ def override_inital_shading_group():
             force=True
             )
         cmds.select(cl=True)
-        create_script_job()
     elif not state:
         if cmds.objExists(mat_name):
             cmds.connectAttr(
@@ -89,7 +54,6 @@ def override_inital_shading_group():
                 force=True,
                 )
             cmds.delete(mat_name)
-            kill_script_job()
 
 
 class ColorManager(BaseSettingManager):

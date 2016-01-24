@@ -4,6 +4,7 @@ import os
 import json
 import logging
 
+from maya import cmds
 
 __title__ = 'mayaprefs'
 __version__ = '0.1.3'
@@ -73,7 +74,13 @@ def init(*args):
     if args:
         for i in args:
             _config_paths.append(i)
+    initialize_settings()
 
+    job = cmds.scriptJob(e=['NewSceneOpened', initialize_settings])
+    _config['CURRENT_MAYA_SESSION_SCRIPTJOB_NUMBER'] = job
+
+
+def initialize_settings():
     # Import package files and init them.
     from mamprefs import settings, hotkeys, markingmenus, layouts
 

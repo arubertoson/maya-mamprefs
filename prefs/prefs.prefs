@@ -98,6 +98,7 @@
              "-limitBackups true;"),
             "optionVar -iv autoSaveMaxBackups 3; autoSave -maxBackups 3;",
             "setPolyCountVisibility(1);",
+            "if (`window -exists NewFeatureHighlightWnd`) deleteUI -window NewFeatureHighlightWnd;",
 
             # Plugins
             # 'unloadPluginWithCheck("C:/Program Files/Autodesk/Maya2015/bin/plug-ins/CloudImportExport.mll")',
