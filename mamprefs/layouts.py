@@ -7,7 +7,7 @@ from functools import partial
 
 from maya import cmds, mel
 
-from mamprefs import _config, _layout_docks
+from mamprefs import config, _layout_docks
 from mamprefs.base import BaseManager, deleteUI, file_to_pyobject
 
 
@@ -18,7 +18,7 @@ def reset_screen():
     """
     Hide all main window docks.
     """
-    for name in _config['WINDOW_RESET_DOCKS']:
+    for name in config['WINDOW_RESET_DOCKS']:
         try:
             cmds.dockControl(name, e=True, vis=False)
         except RuntimeError:
@@ -29,7 +29,7 @@ def docks(direction):
     """
     Dock Maya main window docks to the direction location.
     """
-    for i in _config['WINDOW_MAIN_DOCKS']:
+    for i in config['WINDOW_MAIN_DOCKS']:
         name = mel.eval('getUIComponentDockControl("{}", false)'.format(i))
         if not name:
             name = 'NEXDockControl'
@@ -62,7 +62,7 @@ class LayoutManager(BaseManager):
                     cmds.menuItem(
                         l=layout.visible_name,
                         c=partial(layout.load)
-                        )
+                    )
                     cmds.menuItem(ob=True, c=partial(self.edit, f))
 
     def initUI(self):
@@ -72,10 +72,10 @@ class LayoutManager(BaseManager):
         super(LayoutManager, self).initUI()
 
         # UI element names
-        main_menu = _config['MENU_MAIN_NAME']
-        layout_menu = _config['MENU_LAYOUT_NAME']
-        hotkey_menu = _config['MENU_HOTKEY_NAME']
-        layout_reload = layout_menu+'_RELOAD'
+        main_menu = config['MENU_MAIN_NAME']
+        parent_menu = config['MENU_HOTKEY_NAME']
+        layout_menu = config['MENU_LAYOUT_NAME']
+        layout_reload = layout_menu + '_RELOAD'
 
         # Delete UI element if they exists.
         deleteUI(layout_menu)
@@ -84,27 +84,27 @@ class LayoutManager(BaseManager):
         cmds.menuItem(
             layout_menu,
             label='Layouts',
-            insertAfter=hotkey_menu,
+            insertAfter=parent_menu,
             parent=main_menu,
             subMenu=True,
             tearOff=True
-            )
+        )
         cmds.menuItem(
             layout_reload,
             label='Update',
             c=lambda *args: self.reload_layouts(),
-            )
+        )
         cmds.menuItem(divider=True)
         self._add_layout_item()
         cmds.menuItem(divider=True)
         cmds.menuItem(
             label='Maya Default',
             c=lambda *args: self.reset_settings(),
-            )
+        )
 
     def reset_settings(self):
         mel.eval('setNamedPanelLayout "Single Perspective View"')
-        _config['CURRENT_LAYOUT_NAME'] = None
+        config['CURRENT_LAYOUT_NAME'] = None
 
     def reload_layouts(self):
         self.reload()
@@ -144,7 +144,7 @@ class Layout(object):
         self.layout = str(self.layout_string).format(
             self.visible_name,
             ';'.join(self.commands)
-            )
+        )
 
     def load(self, *args):
         """
@@ -152,7 +152,7 @@ class Layout(object):
         """
         reset_screen()
         active = '{} {}'.format(self.file_name, self.name)
-        _config['CURRENT_LAYOUT_NAME'] = active
+        config['CURRENT_LAYOUT_NAME'] = active
 
         if cmds.getPanel(cwl=self.visible_name) is None:
             mel.eval(self.layout)
@@ -174,10 +174,14 @@ def init():
     LayoutManager.instance.initUI()
 
     # Launch layout from last session
-    active_layout = _config['CURRENT_LAYOUT_NAME']
+    active_layout = config['CURRENT_LAYOUT_NAME']
     if active_layout is not None:
         file_, active = active_layout.split(' ')
-        LayoutManager.instance[file_][active].load()
+        try:
+            LayoutManager.instance[file_][active].load()
+        except TypeError:
+            config['CURRENT_LAYOUT_NAME'] = None
+            logger.warn('{} file or {} layout does not exist.'.format(file_, active))
 
 
 if __name__ == '__main__':

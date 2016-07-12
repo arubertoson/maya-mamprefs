@@ -10,7 +10,7 @@ from functools import partial
 
 from maya import cmds, mel
 
-from mamprefs import _config_paths, _config
+from mamprefs import cfg_paths, config
 
 
 logger = logging.getLogger(__name__)
@@ -24,7 +24,7 @@ def file_to_pyobject(file_):
         return ast.literal_eval(f.read())
 
 
-def get_files(type_, paths=_config_paths):
+def get_files(type_, paths=cfg_paths):
     """
     Collect hotkey config files from given config paths.
     """
@@ -62,7 +62,10 @@ class BaseManager(collections.Mapping):
         self.reload()
 
     def __getitem__(self, key):
-        return self.map[key]
+        try:
+            return self.map[key]
+        except KeyError:
+            logger.warn('{} does not exist in map.'.format(key))
 
     def __iter__(self):
         return iter(self.map)
@@ -75,15 +78,15 @@ class BaseManager(collections.Mapping):
         Checks if base menu exists, if not create it.
         """
         # Ui element names
-        main_menu = _config['MENU_MAIN_NAME']
-        menu_label = _config['MENU_MAIN_LABEL']
+        main_menu = config['MENU_MAIN_NAME']
+        menu_label = config['MENU_MAIN_LABEL']
 
         if not cmds.menu(main_menu, exists=True):
             cmds.menu(
                 main_menu,
                 label=menu_label,
                 parent=mel.eval('$tmpvar = $gMainWindow'),
-                )
+            )
 
     def parse_files(self):
         """
@@ -119,8 +122,8 @@ class BaseManager(collections.Mapping):
 
     def itersubclasses(self, cls, _seen=None):
         if not isinstance(cls, type):
-             raise TypeError('itersubclasses must be called with '
-                             'new-style classes, not %.100r' % cls)
+            raise TypeError('itersubclasses must be called with '
+                            'new-style classes, not %.100r' % cls)
         if _seen is None: _seen = set()
         try:
             subs = cls.__subclasses__()
@@ -151,7 +154,7 @@ class BaseSettingManager(BaseManager):
             cmds.menuItem(
                 l=item.title(),
                 c=partial(self.make_file_active, item),
-                )
+            )
             cmds.menuItem(ob=True, c=partial(self.edit, item))
         cmds.menuItem(divider=True)
 

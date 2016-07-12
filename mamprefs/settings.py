@@ -4,8 +4,8 @@ import logging
 
 from maya import cmds, mel
 
-from mamprefs import _config
-from mamprefs.base import BaseManager, BaseSettingManager, deleteUI
+from mamprefs import config
+from mamprefs.base import BaseSettingManager, deleteUI
 
 
 logger = logging.getLogger(__name__)
@@ -19,9 +19,9 @@ def toggle_inital_shader_group(state=None):
     if state is not None:
         _state = state
     else:
-        _state = not(_config['STATE_INIT_SHADER_OVERRIDE'])
+        _state = not(config['STATE_INIT_SHADER_OVERRIDE'])
 
-    _config['STATE_INIT_SHADER_OVERRIDE'] = _state
+    config['STATE_INIT_SHADER_OVERRIDE'] = _state
     override_inital_shading_group()
     return _state
 
@@ -31,20 +31,20 @@ def override_inital_shading_group():
     Create a custom material for the initial shading group.
     """
     # states
-    state = _config['STATE_INIT_SHADER_OVERRIDE']
-    mat_name = _config['CURRENT_INIT_SHADER_OVERRIDE_MATNAME']
+    state = config['STATE_INIT_SHADER_OVERRIDE']
+    mat_name = config['CURRENT_INIT_SHADER_OVERRIDE_MATNAME']
 
     if state and not cmds.objExists(mat_name):
         blinn = cmds.shadingNode('blinn', asShader=True, n=mat_name)
-        cmds.setAttr(blinn+'.color', 0.8, 0.8, 0.8)
-        cmds.setAttr(blinn+'.specularColor', 1, 1, 1)
-        cmds.setAttr(blinn+'.eccentricity', 0.2)
-        cmds.setAttr(blinn+'.specularRollOff', 0.2)
+        cmds.setAttr(blinn + '.color', 0.8, 0.8, 0.8)
+        cmds.setAttr(blinn + '.specularColor', 1, 1, 1)
+        cmds.setAttr(blinn + '.eccentricity', 0.2)
+        cmds.setAttr(blinn + '.specularRollOff', 0.2)
         cmds.connectAttr(
-            blinn+'.outColor',
+            blinn + '.outColor',
             'initialShadingGroup.surfaceShader',
             force=True
-            )
+        )
         cmds.select(cl=True)
     elif not state:
         if cmds.objExists(mat_name):
@@ -52,7 +52,7 @@ def override_inital_shading_group():
                 'lambert1.outColor',
                 'initialShadingGroup.surfaceShader',
                 force=True,
-                )
+            )
             cmds.delete(mat_name)
 
 
@@ -62,7 +62,7 @@ class ColorManager(BaseSettingManager):
     instance = None
 
     def __init__(self):
-        self.active = _config['CURRENT_MAYA_COLOR_OVERRIDE_NAME']
+        self.active = config['CURRENT_MAYA_COLOR_OVERRIDE_NAME']
         super(ColorManager, self).__init__('.color')
 
     def initUI(self):
@@ -72,9 +72,9 @@ class ColorManager(BaseSettingManager):
         super(ColorManager, self).initUI()
 
         # UI element names
-        main_menu = _config['MENU_MAIN_NAME']
-        marking_menu = _config['MENU_MARKING_NAME']
-        override_color_menu = _config['MENU_MAYA_COLOR_OVERRIDE_NAME']
+        main_menu = config['MENU_MAIN_NAME']
+        marking_menu = config['MENU_MARKING_NAME']
+        override_color_menu = config['MENU_MAYA_COLOR_OVERRIDE_NAME']
 
         # Delete UI element if they exists.
         deleteUI(override_color_menu)
@@ -87,16 +87,16 @@ class ColorManager(BaseSettingManager):
             subMenu=True,
             tearOff=True,
             parent=main_menu,
-            )
+        )
         cmds.menuItem(
             label='Update',
             command=lambda *args: self.reload_settings(),
-            )
+        )
         self._add_menu_items()
         cmds.menuItem(
             label='Maya Defaults',
             c=lambda *args: self.reset_settings(),
-            )
+        )
 
     # PUBLIC
 
@@ -111,7 +111,7 @@ class ColorManager(BaseSettingManager):
 
     def make_file_active(self, file_, *args):
         super(ColorManager, self).make_file_active(file_)
-        _config['CURRENT_MAYA_COLOR_OVERRIDE_NAME'] = self.active = file_
+        config['CURRENT_MAYA_COLOR_OVERRIDE_NAME'] = self.active = file_
 
     def reset_settings(self):
         """
@@ -119,7 +119,7 @@ class ColorManager(BaseSettingManager):
         """
         self.reset_custom()
         mel.eval('displayColor -rf; colorIndex -rf; displayRGBColor -rf;')
-        _config['CURRENT_MAYA_COLOR_OVERRIDE_NAME'] = None
+        config['CURRENT_MAYA_COLOR_OVERRIDE_NAME'] = None
 
     def reset_custom(self):
         reset_list = [
@@ -130,7 +130,7 @@ class ColorManager(BaseSettingManager):
             'GridOptions; performGridOptions 0; hideOptionBox;',
             # Gradient
             'displayPref -displayGradient 1'
-            ]
+        ]
         for i in reset_list:
             mel.eval(i)
 
@@ -143,7 +143,7 @@ class SettingManager(BaseSettingManager):
 
     def __init__(self):
         self.shading_group_job = None
-        self.active = _config['CURRENT_MAYA_SETTINGS_OVERRIDE_NAME']
+        self.active = config['CURRENT_MAYA_SETTINGS_OVERRIDE_NAME']
         super(SettingManager, self).__init__('.prefs')
 
     def initUI(self):
@@ -153,11 +153,11 @@ class SettingManager(BaseSettingManager):
         super(SettingManager, self).initUI()
 
         # UI element names
-        main_menu = _config['MENU_MAIN_NAME']
-        setting_menu = _config['MENU_MAYA_SETTINGS_OVERRIDE_NAME']
-        color_menu = _config['MENU_MAYA_COLOR_OVERRIDE_NAME']
-        override_mat_menu = _config['MENU_INIT_SHADER_OVERRIDE_NAME']
-        reset_all = _config['MENU_RESET_ALL_NAME']
+        main_menu = config['MENU_MAIN_NAME']
+        setting_menu = config['MENU_MAYA_SETTINGS_OVERRIDE_NAME']
+        color_menu = config['MENU_MAYA_COLOR_OVERRIDE_NAME']
+        override_mat_menu = config['MENU_INIT_SHADER_OVERRIDE_NAME']
+        reset_all = config['MENU_RESET_ALL_NAME']
         div1 = setting_menu + '_DIV1'
         div2 = setting_menu + '_DIV2'
 
@@ -172,43 +172,43 @@ class SettingManager(BaseSettingManager):
             parent=main_menu,
             subMenu=True,
             tearOff=True,
-            )
+        )
         cmds.menuItem(
             label='Update',
             command=lambda *args: self.reload_settings(),
-            )
+        )
         self._add_menu_items()
         cmds.menuItem(
             label='Maya Defaults',
             c=lambda *args: self.reset_settings(),
-            )
+        )
         cmds.menuItem(
             div1,
             divider=True,
             insertAfter=setting_menu,
             parent=main_menu
-            )
+        )
         cmds.menuItem(
             override_mat_menu,
             label='Override Inital Shading',
             insertAfter=div1,
             parent=main_menu,
-            checkBox=_config['STATE_INIT_SHADER_OVERRIDE'],
+            checkBox=config['STATE_INIT_SHADER_OVERRIDE'],
             c=lambda *args: toggle_inital_shader_group(),
-            )
+        )
         cmds.menuItem(div2, divider=True, parent=main_menu)
         cmds.menuItem(
             reset_all,
             label='Reset to factory settings',
             parent=main_menu,
             c=lambda *args: self.reset_all(),
-            )
+        )
 
     # PUBLIC
 
     def make_file_active(self, file_, *args):
         super(SettingManager, self).make_file_active(file_)
-        _config['CURRENT_MAYA_SETTINGS_OVERRIDE_NAME'] = self.active = file_
+        config['CURRENT_MAYA_SETTINGS_OVERRIDE_NAME'] = self.active = file_
 
     def reload_settings(self):
         """
@@ -219,7 +219,7 @@ class SettingManager(BaseSettingManager):
         if self.active is not None:
             self.make_file_active(self.active)
 
-        if _config['STATE_INIT_SHADER_OVERRIDE']:
+        if config['STATE_INIT_SHADER_OVERRIDE']:
             toggle_inital_shader_group(True)
 
     def reset_settings(self):
@@ -229,7 +229,7 @@ class SettingManager(BaseSettingManager):
         self.reset_custom()
         mel.eval('PreferencesWindow; revertToFactoryPrefs; setFocus '
                  'prefsSaveBtn; savePrefsChanges;')
-        _config['CURRENT_MAYA_SETTINGS_OVERRIDE_NAME'] = self.active = None
+        config['CURRENT_MAYA_SETTINGS_OVERRIDE_NAME'] = self.active = None
         self.reset_override_initial_saving_group()
 
     def reset_custom(self):
@@ -249,7 +249,7 @@ class SettingManager(BaseSettingManager):
             'setPolyCountVisibility(0);',
             # Display
             'PolyDisplayReset;',
-            ]
+        ]
         for i in reset_list:
             mel.eval(i)
 

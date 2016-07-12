@@ -5,11 +5,12 @@ from functools import partial
 
 from maya import cmds
 
-from mamprefs import _config
+from mamprefs import config
 from mamprefs.base import BaseManager, deleteUI, file_to_pyobject
 
 
 logger = logging.getLogger(__name__)
+# logger.setLevel(logging.INFO)
 
 
 def get_parent_panel():
@@ -53,7 +54,7 @@ class MarkingMenuManager(BaseManager):
                 cmds.menuItem(
                     l=menu.name.title(),
                     c=partial(self.output, menu),
-                    )
+                )
                 cmds.menuItem(ob=True, c=partial(self.edit, file_name))
         cmds.menuItem(divider=True)
 
@@ -64,9 +65,9 @@ class MarkingMenuManager(BaseManager):
         super(MarkingMenuManager, self).initUI()
 
         # UI element names
-        main_menu = _config['MENU_MAIN_NAME']
-        marking_menu = _config['MENU_MARKING_NAME']
-        layout_menu = _config['MENU_LAYOUT_NAME']
+        main_menu = config['MENU_MAIN_NAME']
+        marking_menu = config['MENU_MARKING_NAME']
+        layout_menu = config['MENU_LAYOUT_NAME']
 
         # Delete UI elements if they exists.
         deleteUI(marking_menu)
@@ -80,22 +81,21 @@ class MarkingMenuManager(BaseManager):
             insertAfter=layout_menu,
             parent=main_menu,
             tearOff=True,
-            )
+        )
         cmds.menuItem(l='Update', c=lambda *args: self.reload_marking_menus())
         if self.map:
             self.add_menu_items()
         else:
             cmds.menuItem(l='No Marking Menus', enable=False)
-        cmds.menuItem(divider=True)
         cmds.menuItem(l='Clean Scene', c=lambda *args: self.clean_menu())
 
     def parse_files(self):
         for file_name, f in self.files.iteritems():
             file_map = file_to_pyobject(f)
             self.map[file_name] = [
-                MarkingMenu(name, item)
+                MarkingMenu(**menu)
                 for menu in file_map
-                for name, item in menu.iteritems()
+                # for name, item in menu.iteritems()
             ]
 
     def reload_marking_menus(self):
@@ -109,7 +109,7 @@ class MarkingMenuManager(BaseManager):
         """
         .. note:: Might be redundant.
         """
-        deleteUI(_config['MENU_MARKING_POPUP_NAME'])
+        deleteUI(config['MENU_MARKING_POPUP_NAME'])
 
     def output(self, menu, *args):
         """
@@ -132,9 +132,14 @@ class MarkingMenu(object):
     """
 
     """
-    def __init__(self, name, items):
+    def __init__(self, name, button, marking_menu, modifiers, items):
         self.name = name
+        self.marking_menu = marking_menu
+        self.button = button
         self.items = [MarkingMenuItem(**i) for i in items]
+        self.modifiers = {'{}Modifier'.format(i): True for i in modifiers}
+
+        logger.debug([name, button, marking_menu, modifiers, items])
 
     def __str__(self):
         return '{}({})'.format(self.__class__.__name__, self.name)
@@ -145,8 +150,13 @@ class MarkingMenu(object):
         """
         Creates menu items.
         """
-        cmds.popupMenu(_config['MENU_MARKING_POPUP_NAME'], b=1, mm=True,
-                       parent=get_parent_panel())
+        cmds.popupMenu(
+            config['MENU_MARKING_POPUP_NAME'],
+            button=self.button,
+            markingMenu=self.marking_menu,
+            parent=get_parent_panel(),
+            **self.modifiers
+        )
         for item in self.items:
             if 'set_parent' in item:
                 cmds.setParent('..', m=True)
@@ -157,7 +167,7 @@ class MarkingMenu(object):
         """
         Shows marking menu on hotkey press.
         """
-        deleteUI(_config['MENU_MARKING_POPUP_NAME'])
+        deleteUI(config['MENU_MARKING_POPUP_NAME'])
         self.build_menu()
 
 
@@ -206,7 +216,10 @@ class MarkingMenuItem(object):
             if 'sub_menu' in kwargs:
                 self.menu_kwargs['subMenu'] = kwargs.pop('sub_menu', None)
 
-            # kwargs['command'] = kwargs['command']+'; maya_prefs.hide_menu()'
+            # kwargs['command'] = '{}; {}; {}'.format(kwargs['command'],
+            #                                     'import mamprefs',
+            #                                     'mamprefs.markingmenus.hide_menu()')
+            logger.debug(kwargs['command'])
             self.menu_kwargs.update(kwargs)
 
     def __str__(self):
@@ -244,8 +257,9 @@ def show_menu(menu):
 
 
 def hide_menu():
-    deleteUI(_config['MENU_MARKING_POPUP_NAME'])
+    deleteUI(config['MENU_MARKING_POPUP_NAME'])
 
 
 if __name__ == '__main__':
-    init()
+    print cmds.getPanel(wf=True)
+    # init()
