@@ -76,9 +76,12 @@
         ]
     },
     {
-        "commandPort":
+        "textureWindow":
         [
-            {"name": ":7002", "sourceType": "python"}
+            {
+                "edit": True,
+                "displaySolidMap": True
+            },
         ]
     },
     {

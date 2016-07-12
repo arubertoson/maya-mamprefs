@@ -62,8 +62,8 @@
         "displayRGBColor":
         [
             # Viewport
-            ["background", 0.55, 0.57, 0.60],
-            ["backgroundTop", 0.55, 0.57, 0.60],
+            ["background", 0.45, 0.47, 0.50],
+            ["backgroundTop", 0.45, 0.47, 0.50],
             ["backgroundBottom", 0.22, 0.25, 0.28],
 
             # Preselect highlight

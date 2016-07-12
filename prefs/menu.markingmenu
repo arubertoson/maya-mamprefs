@@ -1,6 +1,10 @@
 [
     {
-        "delete":
+        "name": "delete",
+        "marking_menu": False,
+        "button": 1,
+        "modifiers": ["shift"],
+        "items":
         [
             {"label": "history", "command": "print('history')", "position": "N"},
             {"label": "something", "command": "print('hello')", "position": "S"},
@@ -11,22 +15,18 @@
         ]
     },
     {
-        "select":
+        "name": "delete2",
+        "marking_menu": True,
+        "button": 1,
+        "modifiers": ["shift", "ctrl"],
+        "items":
         [
-            {"label": "coplanar", "command": "print('hello')", "position": "SE"},
-        ]
-    },
-    {
-        "scripts":
-        [
-            {"label": "coplanar", "sub_menu": True, "command": "print('hello')"},
-                # coplanar submenu
-                {"label": "Test", "command": "print('gbue')"},
+            {"label": "history", "command": "print('history')", "position": "N"},
+            {"label": "something", "command": "print('hello')", "position": "S"},
+            {"label": "different", "sub_menu": True, "command": "print('hello')", "position": "W"},
+                {"label": "of course", "command": "print('hello')", "position": "S"},
+                {"label": "pease", "command": "print('hello')", "position": "E"},
                 {"set_parent": True},
-
-            {"label": "coplanar", "command": "print('hello')"},
-            {"label": "coplanar", "command": "print('hello')"},
-            {"label": "coplanar", "command": "print('hello')"}
         ]
-    },
+    }
 ]
