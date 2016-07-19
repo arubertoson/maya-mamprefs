@@ -1,6 +1,10 @@
 """
 """
+import sys
+import re
+import keyword
 import logging
+import traceback
 from functools import partial
 
 from maya import cmds
@@ -10,7 +14,7 @@ from mamprefs.base import BaseManager, deleteUI, file_to_pyobject
 
 
 logger = logging.getLogger(__name__)
-# logger.setLevel(logging.INFO)
+logger.setLevel(logging.INFO)
 
 
 def get_parent_panel():
@@ -136,9 +140,10 @@ class MarkingMenu(object):
         self.name = name
         self.marking_menu = marking_menu
         self.button = button
-        self.items = [MarkingMenuItem(**i) for i in items]
+        self.items = list()
         self.modifiers = {'{}Modifier'.format(i): True for i in modifiers}
 
+        self.parse_items(items)
         logger.debug([name, button, marking_menu, modifiers, items])
 
     def __str__(self):
@@ -146,22 +151,43 @@ class MarkingMenu(object):
 
     __repr__ = __str__
 
+    def parse_items(self, items):
+        logger.debug('New menu.')
+        for item in items:
+            logger.debug(item)
+            if 'sub_menu' in item:
+                logging.debug('building sub menu')
+                sub_list = item.pop('sub_menu', [])
+                sub_list.append({'set_parent': True})
+                logging.debug(sub_list)
+
+                item['subMenu'] = True
+                self.items.append(MarkingMenuItem(**item))
+                self.parse_items(sub_list)
+            else:
+                self.items.append(MarkingMenuItem(**item))
+
     def build_menu(self):
         """
         Creates menu items.
         """
-        cmds.popupMenu(
-            config['MENU_MARKING_POPUP_NAME'],
-            button=self.button,
-            markingMenu=self.marking_menu,
-            parent=get_parent_panel(),
-            **self.modifiers
-        )
-        for item in self.items:
-            if 'set_parent' in item:
-                cmds.setParent('..', m=True)
-            else:
-                cmds.menuItem(**item.unpack())
+        try:
+            cmds.popupMenu(
+                config['MENU_MARKING_POPUP_NAME'],
+                button=self.button,
+                markingMenu=self.marking_menu,
+                parent=get_parent_panel(),
+                **self.modifiers
+            )
+            logger.debug('building menu items:')
+            for item in self.items:
+                logger.debug(item)
+                if 'set_parent' in item:
+                    cmds.setParent('..', m=True)
+                else:
+                    cmds.menuItem(**item.unpack())
+        except:
+            traceback.print_exc(file=sys.stdout)
 
     def show(self):
         """
@@ -208,23 +234,28 @@ class MarkingMenuItem(object):
             self.menu_kwargs = {'divider': True}
         elif 'set_parent' in kwargs:
             self.menu_kwargs['set_parent'] = '..'
+            # self.menu_kwargs['label'] = 'set_parent'
         else:
             self.menu_kwargs = self.default_menu.copy()
             if 'position' in kwargs:
                 kwargs['radialPosition'] = kwargs.pop('position', None)
 
-            if 'sub_menu' in kwargs:
-                self.menu_kwargs['subMenu'] = kwargs.pop('sub_menu', None)
+            # if 'sub_menu' in kwargs:
+            #     self.menu_kwargs['subMenu'] = kwargs.pop('sub_menu', None)
 
-            # kwargs['command'] = '{}; {}; {}'.format(kwargs['command'],
-            #                                     'import mamprefs',
-            #                                     'mamprefs.markingmenus.hide_menu()')
-            logger.debug(kwargs['command'])
+            if 'command' in kwargs:
+                kwargs['command'] = str(Command(kwargs['command']))
+
             self.menu_kwargs.update(kwargs)
 
+        logger.debug(self.menu_kwargs)
+        # if 'label' not in self.menu_kwargs:
+        #     self.menu_kwargs['label'] = 'deadun'
+
     def __str__(self):
-        return '{}({})'.format(self.__class__.__name__,
-                               self.menu_kwargs['label'])
+        if 'label' not in self.menu_kwargs:
+            return '{}()'.format(self.__class__.__name__)
+        return '{}({})'.format(self.__class__.__name__, self.menu_kwargs['label'])
 
     def __getitem__(self, key):
         return self.menu_kwargs[key]
@@ -236,6 +267,57 @@ class MarkingMenuItem(object):
 
     def unpack(self):
         return self.menu_kwargs
+
+
+class Command(object):
+
+    regex = re.compile(ur'^\w+')
+    # hide_menu_command = 'import mamprefs; mamprefs.markingmenus.hide_menu()'
+
+    def __init__(self, command_string):
+        self.command_string = command_string
+        self._module = None
+        self._parsed_command = None
+
+    def __str__(self):
+        return '{}'.format(self.parsed_command)
+
+    @property
+    def module(self):
+        if self._module is None:
+            try:
+                _module = re.findall(self.regex, self.command_string)[0]
+            except IndexError:
+                _module = None
+        return _module
+
+    @property
+    def is_module_keyword(self):
+        return keyword.iskeyword(self.module)
+
+    @property
+    def is_maya_keyword(self):
+        return self.module in ['cmds', 'mel']
+
+    @property
+    def parsed_command(self):
+        if self._parsed_command is None:
+            self._parsed_command = self.parse()
+        return self._parsed_command
+
+    def parse(self):
+        tmpcommand = ''
+        if self.module is None:
+            return 'null'
+
+        if self.is_module_keyword or self.is_maya_keyword:
+            tmpcommand = self.command_string
+        else:
+            tmpcommand = 'import {0.module}; {0.command_string}'.format(self)
+
+        # tmpcommand = '{}; {}'.format(tmpcommand, self.hide_menu_command)
+        logger.debug('parsed command to: {}'.format(tmpcommand))
+        return tmpcommand
 
 
 def init():
@@ -250,10 +332,12 @@ def show_menu(menu):
     if MM.instance is None:
         MM.instance = MM()
 
+    logger.debug(MM.instance[menu])
     try:
         MM.instance[menu].show()
     except KeyError:
-        logger.error('{} is not in manager.'.format(menu))
+        logger.exception(traceback.format_exc())
+        # logger.error('{} is not in manager.'.format(menu))
 
 
 def hide_menu():
@@ -261,5 +345,34 @@ def hide_menu():
 
 
 if __name__ == '__main__':
-    print cmds.getPanel(wf=True)
     # init()
+    # print MarkingMenuManager.instance['selection_model_marking']
+    show_menu('selection_model_marking')
+    # import os
+    # import tempfile
+
+    # mname = "MAM_SCRIPT_OUTPUT_SCROLLFIELD"
+    # fname = os.path.join(tempfile.gettempdir(), 'mamtemp.txt')
+    # open(fname, 'w+').close()
+
+    # menu = cmds.popupMenu(config['MENU_MARKING_POPUP_NAME'], parent=get_parent_panel())
+    # # print menu
+
+    # try:
+    #     result = cmds.cmdScrollFieldReporter(mname, q=True, echoAllCommands=True)
+    #     if not result:
+    #         cmds.cmdScrollFieldReporter(mname, e=True, echoAllCommands=True)
+    # except RuntimeError:
+    #     pass
+
+    # cmds.scriptEditorInfo(historyFilename=fname, writeHistory=True)
+
+    # cmds.dagObjectHit(mn=menu)
+
+
+    # cmds.scriptEditorInfo(writeHistory=False)
+    # with open(fname, 'r') as f:
+    #     print 'reading file', f.read()
+
+    # cmds.popupMenu(mname, q=True, itemArray=True)
+
