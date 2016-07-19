@@ -15,9 +15,9 @@
             [17, 1.0, 1.0, 0.4],
             [18, 0.4, 1.0, 1.0],
 
-            [24, 0.6, 0.6, 0.6],  # background
-            [25, 0.72, 0.72, 0.72],  # wireframe object
-            [26, 1.0, 0.66, 0.16],  # selection
+            [24, 0.45, 0.45, 0.45],  # background
+            [25, 0.8, 0.8, 0.8],  # wireframe object
+            [26, 0.95, 0.72, 0.2],  # selection
             [27, 0.55, 0.71, 0.78],  # preselect highlight
             # [28, 0.76, 0.8, 0.85],  # Viewport labels
             [29, 1.0, 0.78, 0.28],  # Viewport text
@@ -55,15 +55,15 @@
 
             ["gridAxis", 1, {"dormant": True}],
             ["grid", 24, {"dormant": True}],
-            ["gridHighlight", 3, {"dormant": True}],
+            ["gridHighlight", 1, {"dormant": True}],
         ]
     },
     {
         "displayRGBColor":
         [
             # Viewport
-            ["background", 0.45, 0.47, 0.50],
-            ["backgroundTop", 0.45, 0.47, 0.50],
+            ["background", 0.36, 0.4, 0.45],
+            ["backgroundTop", 0.36, 0.4, 0.42],
             ["backgroundBottom", 0.22, 0.25, 0.28],
 
             # Preselect highlight

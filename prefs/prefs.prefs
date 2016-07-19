@@ -78,15 +78,17 @@
     {
         "textureWindow":
         [
-            {
-                "edit": True,
-                "displaySolidMap": True
-            },
+            [
+                "polyTexturePlacementPanel1",
+                {"edit": True, "displaySolidMap": True}
+            ],
         ]
     },
     {
         "mel":
         [
+            "textureWindowToggleTextureImage( \"polyTexturePlacementPanel1\", \"textureWindow\"); refresh;",
+            "txtWndUpdateEditor(\"polyTexturePlacementPanel1\", \"textureWindow\", \"null\", 101);",
             # "$gUseSaveScenePanelConfig = false;file -uc false;",
             # "$gUseScenePanelConfig = false;file -uc false;",
             "$gUseNewScenePanelConfig = false;",

@@ -1,32 +1,135 @@
 [
     {
-        "name": "delete",
-        "marking_menu": False,
+        "name": "delete_model_marking",
+        "marking_menu": True,
         "button": 1,
-        "modifiers": ["shift"],
+        "modifiers": ["ctrl"],
         "items":
         [
-            {"label": "history", "command": "print('history')", "position": "N"},
-            {"label": "something", "command": "print('hello')", "position": "S"},
-            {"label": "different", "sub_menu": True, "command": "print('hello')", "position": "W"},
-                {"label": "of course", "command": "print('hello')", "position": "S"},
-                {"label": "pease", "command": "print('hello')", "position": "E"},
-                {"set_parent": True},
+
+            {"label": "Freeze Translate", "command": "mamtools.delete.transforms(translate=True)", "position": "N"},
+            {"label": "Freeze Rotate", "command": "mamtools.delete.transforms(rotate=True)", "position": "NE"},
+            {"label": "Freeze Scale", "command": "mamtools.delete.transforms(scale=True)", "position": "NW"},
+            {"label": "history", "command": "mamtools.delete.history()", "position": "S"},
+
+            {"label": "Freeze All", "command": "mamtools.delete.transforms(True, True, True)"},
+            {"label": "Unbevel", "command": "mamtools.delete.unbevel()"},
+
         ]
     },
     {
-        "name": "delete2",
+        "name": "delete_uvs_marking",
         "marking_menu": True,
         "button": 1,
-        "modifiers": ["shift", "ctrl"],
+        "modifiers": ["ctrl"],
         "items":
         [
-            {"label": "history", "command": "print('history')", "position": "N"},
-            {"label": "something", "command": "print('hello')", "position": "S"},
-            {"label": "different", "sub_menu": True, "command": "print('hello')", "position": "W"},
-                {"label": "of course", "command": "print('hello')", "position": "S"},
-                {"label": "pease", "command": "print('hello')", "position": "E"},
-                {"set_parent": True},
+            {"dividerLabel": "Empty", "divider": True, "position": "N"},
+            {"label": "Close", "command": "print('close')", "position": "S"}
         ]
-    }
+    },
+    {
+        "name": "camera_marking",
+        "marking_menu": True,
+        "button": 1,
+        "modifiers": ["ctrl"],
+        "items":
+        [
+            {"label": "Reset Camera", "command": "mamtools.camera.reset_camera()", "position": "S"}
+        ]
+    },
+    {
+        "name": "selection_model_marking",
+        "marking_menu": True,
+        "button": 1,
+        "modifiers": ["ctrl"],
+        "items":
+        [
+            {"label": "Fill Surrounded", "command": "mamselect.fill()", "position": "S"},
+            {
+                "label": "Select Non Quads",
+                "sub_menu":
+                [
+                    {"label": "Tris", "command": "mamselect.mesh.nonquads(False)"},
+                    {"label": "NGons", "command": "mamselect.mesh.nonquads(True)"},
+                ]
+            },
+            {
+                "label": "Coplanar",
+                "position": "N",
+                "sub_menu":
+                [
+                    {"label": "Contiguouse", "command": "mamselect.coplanar.contiguous(context=True)", "position": "N"},
+                    {"label": "Hilited", "command": "mamselect.coplanar.hilited(context=True)", "position": "NE"},
+                    {"label": "Object", "command": "mamselect.coplanar.object(context=True)", "position": "NW"},
+                ]
+            }
+        ]
+    },
+    {
+        "name": "uvs_marking",
+        "marking_menu": True,
+        "button": 1,
+        "modifiers": ["ctrl"],
+        "items":
+        [
+            {
+                "label": "Align",
+                "position": "N",
+                "sub_menu":
+                [
+                    {"label": "Left", "command": "mamuvs.align('minu')", "position": "W"},
+                    {"label": "Right", "command": "mamuvs.align('maxu')", "position": "E"},
+                    {"label": "Top", "command": "mamuvs.align('maxv')", "position": "N"},
+                    {"label": "Bottom", "command": "mamuvs.align('minv')", "position": "S"},
+                ]
+            },
+            {
+                "label": "Distribute",
+                "position": "NW",
+                "sub_menu":
+                [
+                    {"label": "u", "command": "mamuvs.distribute('u')", "position": "W"},
+                    {"label": "v", "command": "mamuvs.distribute('v')", "position": "N"},
+                ]
+            },
+            {
+                "label": "Spacing",
+                "position": "NE",
+                "sub_menu":
+                [
+                    {"label": "u", "command": "mamuvs.space('u')", "position": "E"},
+                    {"label": "v", "command": "mamuvs.space('v')", "position": "N"},
+                    {"label": "Set Spacing", "command": "mamuvs.set_space()", "position": "N"},
+                ]
+            },
+            {
+                "label": "Scale",
+                "position": "W",
+                "sub_menu":
+                [
+                    {"label": "Max Horizontal", "command": "mamuvs.scalefit('maxu')", "position": "E"},
+                    {"label": "Min Horizontal", "command": "mamuvs.scalefit('minu')", "position": "W"},
+                    {"label": "Max Vertical", "command": "mamuvs.scalefit('maxv')", "position": "N"},
+                    {"label": "Min Veritcal", "command": "mamuvs.scalefit('minv')", "position": "S"},
+                ]
+            },
+            {"label": "Texel Density", "command": "mamuvs.texel.init()"},
+        ]
+    },
+    {
+        "name": "sculpt_marking",
+        "marking_menu": True,
+        "button": 1,
+        "modifiers": ["ctrl"],
+        "items":
+        [
+            {"label": "Grab", "command": "mamtools.mel('setMeshSculptTool(\"Grab\")')", "position": "NE"},
+            {"label": "Wax", "command": "mamtools.mel('setMeshSculptTool(\"Wax\")')", "position": "N"},
+            {"label": "Flatten", "command": "mamtools.mel('setMeshSculptTool(\"Flatten\")')", "position": "NW"},
+            {"label": "Pinch", "command": "mamtools.mel('setMeshSculptTool(\"Pinch\")')", "position": "W"},
+            {"label": "Freeze", "command": "mamtools.mel('setMeshSculptTool(\"Freeze\")')", "position": "S"},
+            {"label": "Bulge", "command": "mamtools.mel('setMeshSculptTool(\"Bulge\")')", "position": "E"},
+        ]
+    },
 ]
