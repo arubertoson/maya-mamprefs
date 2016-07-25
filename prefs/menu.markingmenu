@@ -59,9 +59,9 @@
                 "position": "N",
                 "sub_menu":
                 [
-                    {"label": "Contiguouse", "command": "mamselect.coplanar.contiguous(context=True)", "position": "N"},
-                    {"label": "Hilited", "command": "mamselect.coplanar.hilited(context=True)", "position": "NE"},
-                    {"label": "Object", "command": "mamselect.coplanar.object(context=True)", "position": "NW"},
+                    {"label": "Contiguouse", "command": "mamselect.coplanar.contiguous(context=False)", "position": "N"},
+                    {"label": "Hilited", "command": "mamselect.coplanar.hilited(context=False)", "position": "NE"},
+                    {"label": "Object", "command": "mamselect.coplanar.object(context=False)", "position": "NW"},
                 ]
             }
         ]
