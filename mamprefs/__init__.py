@@ -7,7 +7,7 @@ import logging
 from maya import cmds
 
 __title__ = 'mayaprefs'
-__version__ = '0.1.4'
+__version__ = '0.1.6'
 __author__ = 'Marcus Albertsson <marcus.arubertoson@gmail.com>'
 __url__ = 'http://github.com/arubertoson/maya-mayaprefs'
 __license__ = 'MIT'
