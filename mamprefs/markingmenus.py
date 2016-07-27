@@ -7,7 +7,12 @@ import logging
 import traceback
 from functools import partial
 
+from PySide import QtCore
+from PySide.QtCore import QObject
+
 from maya import cmds
+
+from mampy.pyside.utils import get_qt_object
 
 from mamprefs import config
 from mamprefs.base import BaseManager, deleteUI, file_to_pyobject
@@ -15,6 +20,9 @@ from mamprefs.base import BaseManager, deleteUI, file_to_pyobject
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+
+ACTIVE_MENU = None
 
 
 def get_parent_panel():
@@ -35,8 +43,6 @@ def get_parent_panel():
 class MarkingMenuManager(BaseManager):
     """
     """
-    instance = None
-
     def __init__(self):
         super(MarkingMenuManager, self).__init__('.markingmenu')
 
@@ -136,13 +142,18 @@ class MarkingMenu(object):
     """
 
     """
-    def __init__(self, name, button, marking_menu, modifiers, items):
+    def __init__(self, name, button, marking_menu, modifiers, items,
+                 option_boxes=False):
         self.name = name
         self.marking_menu = marking_menu
         self.button = button
+        self.option_boxes = option_boxes
         self.items = list()
         self.modifiers = {'{}Modifier'.format(i): True for i in modifiers}
 
+        self.pane_widget = None
+
+        self.closing_event = MarkingMenuEventFilter()
         self.parse_items(items)
         logger.debug([name, button, marking_menu, modifiers, items])
 
@@ -175,6 +186,7 @@ class MarkingMenu(object):
             cmds.popupMenu(
                 config['MENU_MARKING_POPUP_NAME'],
                 button=self.button,
+                allowOptionBoxes=self.option_boxes,
                 markingMenu=self.marking_menu,
                 parent=get_parent_panel(),
                 **self.modifiers
@@ -193,8 +205,62 @@ class MarkingMenu(object):
         """
         Shows marking menu on hotkey press.
         """
+        try:
+            self.pane_widget.removeEventFilter(self.closing_event)
+        except AttributeError:
+            pass
         deleteUI(config['MENU_MARKING_POPUP_NAME'])
+
         self.build_menu()
+
+        self.pane_widget = get_qt_object(get_parent_panel())
+        self.pane_widget.installEventFilter(self.closing_event)
+
+    def hide(self):
+        try:
+            self.pane_widget.removeEventFilter(self.closing_event)
+        except AttributeError:
+            pass
+        deleteUI(config['MENU_MARKING_POPUP_NAME'])
+
+
+class MarkingMenuEventFilter(QObject):
+    """
+    Filter to handle events when building and hiding marking menus.
+    """
+
+    key_release = False
+    is_child = False
+    destroy = False
+
+    def eventFilter(self, obj, event):
+        """Make marking menus behave like other maya marking menus."""
+        # Destroy the menu in a new event cycle. If we don't do this we will
+        # delete the menu before the commands or sub menus are shown and crash
+        # maya.
+        if self.destroy:
+            self.destroy = False
+            hide_menu()
+
+        etype = event.type()
+        if etype == QtCore.QEvent.ChildRemoved:
+            self.is_child = False
+            if self.key_release:
+                self.destroy = True
+
+        if etype == QtCore.QEvent.ChildAdded:
+            self.is_child = True
+
+        else:
+            if etype == QtCore.QEvent.ShortcutOverride:
+                if event.isAutoRepeat():
+                    self.key_release = False
+                    return True
+            elif etype == QtCore.QEvent.KeyRelease:
+                if not self.is_child:
+                    hide_menu()
+                self.key_release = True
+        return super(MarkingMenuEventFilter, self).eventFilter(obj, event)
 
 
 class MarkingMenuItem(object):
@@ -240,17 +306,10 @@ class MarkingMenuItem(object):
             if 'position' in kwargs:
                 kwargs['radialPosition'] = kwargs.pop('position', None)
 
-            # if 'sub_menu' in kwargs:
-            #     self.menu_kwargs['subMenu'] = kwargs.pop('sub_menu', None)
-
             if 'command' in kwargs:
                 kwargs['command'] = str(Command(kwargs['command']))
 
             self.menu_kwargs.update(kwargs)
-
-        logger.debug(self.menu_kwargs)
-        # if 'label' not in self.menu_kwargs:
-        #     self.menu_kwargs['label'] = 'deadun'
 
     def __str__(self):
         if 'label' not in self.menu_kwargs:
@@ -272,7 +331,6 @@ class MarkingMenuItem(object):
 class Command(object):
 
     regex = re.compile(ur'^\w+')
-    # hide_menu_command = 'import mamprefs; mamprefs.markingmenus.hide_menu()'
 
     def __init__(self, command_string):
         self.command_string = command_string
@@ -315,64 +373,35 @@ class Command(object):
         else:
             tmpcommand = 'import {0.module}; {0.command_string}'.format(self)
 
-        # tmpcommand = '{}; {}'.format(tmpcommand, self.hide_menu_command)
         logger.debug('parsed command to: {}'.format(tmpcommand))
         return tmpcommand
 
 
-def init():
-    if MarkingMenuManager.instance is None:
-        MarkingMenuManager.instance = MarkingMenuManager()
+MARKING_MENU_MANAGER = MarkingMenuManager()
 
-    MarkingMenuManager.instance.initUI()
+
+def init():
+    MARKING_MENU_MANAGER.initUI()
 
 
 def show_menu(menu):
-    MM = MarkingMenuManager
-    if MM.instance is None:
-        MM.instance = MM()
+    global ACTIVE_MENU
+    ACTIVE_MENU = menu
 
-    logger.debug(MM.instance[menu])
+    logger.debug(MARKING_MENU_MANAGER[menu])
     try:
-        MM.instance[menu].show()
+        MARKING_MENU_MANAGER[menu].show()
     except KeyError:
         logger.exception(traceback.format_exc())
-        # logger.error('{} is not in manager.'.format(menu))
 
 
 def hide_menu():
-    deleteUI(config['MENU_MARKING_POPUP_NAME'])
+    logger.debug(MARKING_MENU_MANAGER[ACTIVE_MENU])
+    try:
+        MARKING_MENU_MANAGER[ACTIVE_MENU].hide()
+    except KeyError:
+        logger.exception(traceback.format_exc())
 
 
 if __name__ == '__main__':
-    # init()
-    # print MarkingMenuManager.instance['selection_model_marking']
-    show_menu('selection_model_marking')
-    # import os
-    # import tempfile
-
-    # mname = "MAM_SCRIPT_OUTPUT_SCROLLFIELD"
-    # fname = os.path.join(tempfile.gettempdir(), 'mamtemp.txt')
-    # open(fname, 'w+').close()
-
-    # menu = cmds.popupMenu(config['MENU_MARKING_POPUP_NAME'], parent=get_parent_panel())
-    # # print menu
-
-    # try:
-    #     result = cmds.cmdScrollFieldReporter(mname, q=True, echoAllCommands=True)
-    #     if not result:
-    #         cmds.cmdScrollFieldReporter(mname, e=True, echoAllCommands=True)
-    # except RuntimeError:
-    #     pass
-
-    # cmds.scriptEditorInfo(historyFilename=fname, writeHistory=True)
-
-    # cmds.dagObjectHit(mn=menu)
-
-
-    # cmds.scriptEditorInfo(writeHistory=False)
-    # with open(fname, 'r') as f:
-    #     print 'reading file', f.read()
-
-    # cmds.popupMenu(mname, q=True, itemArray=True)
-
+    pass
