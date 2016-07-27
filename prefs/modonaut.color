@@ -40,11 +40,12 @@
             ["polyUV", 26, {"active": True}],
 
             ["hilite", 25, {"active": True}],
-            ["hiliteComponent", 24, {"active": True}],
+            ["hiliteComponent", 1, {"active": True}],
 
             # Inactive colors
 
             # Objects
+            ["polyVertex", 1, {"dormant": True}],
             ["surface", 24, {"dormant": True}],
             ["polymesh", 1, {"dormant": True}],
             ["curve", 25, {"dormant": True}],

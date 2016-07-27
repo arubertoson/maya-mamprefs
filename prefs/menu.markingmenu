@@ -1,9 +1,115 @@
 [
     {
+        "name": "mesh_normal_marking",
+        "marking_menu": True,
+        "button": 1,
+        "modifiers": [],
+        "items":
+        [
+            {"label": "Set Normal Angle", "command": "mamtools.mel('polySoftEdgeWin')", "position": "N"},
+
+            {"label": "Unlock", "command": "mamtools.mel('polyNormalPerVertex -ufn true;')", "position": "NE"},
+            {"label": "Reverse", "command": "mamtools.mel('ReversePolygonNormals')", "position": "NW"},
+
+            {"label": "Soften", "command": "mamtools.mel('SoftPolyEdgeElements 1')", "position": "W"},
+            {"label": "Harden", "command": "mamtools.mel('SoftPolyEdgeElements 0')", "position": "E"},
+
+            {"label": "Display Hard", "command": "mamtools.mel('TogglePolyDisplayHardEdges')", "position": "SE"},
+            {"label": "Display Soft", "command": "mamtools.mel('TogglePolyDisplaySoftEdges')", "position": "SW"},
+            {"label": "Display Standard", "command": "mamtools.mel('TogglePolyDisplayEdges')", "position": "S"},
+            {"label": "Vertex Normals", "command": "mamtools.mel('ToggleVertexNormalDisplay')"},
+        ]
+    },
+    {
+        "name": "mesh_scripts_marking",
+        "marking_menu": True,
+        "button": 1,
+        "modifiers": [],
+        "items":
+        [
+            {"label": "Flatten Averaged", "command": "mamtools.mesh.flatten(averaged=True)", "position": "NW"},
+            {"label": "Flatten", "command": "mamtools.mesh.flatten(averaged=False)", "position": "NE"},
+            {"label": "Make Circle", "command": "mamtools.mesh.make_circle()", "position": "N"},
+            {"label": "Center Pivot", "command": "mamtools.pivots.set_pivot_center()", "position": "S"},
+            {"label": "Match Pivot to Object", "command": "mamtools.pivots.match_pivot_to_object()", "position": "SE"},
+            {"label": "Bake Pivot", "command": "mamtools.pivots.bake_pivot()", "position": "SW"},
+        ]
+    },
+    {
+        "name": "mesh_display_marking",
+        "marking_menu": True,
+        "button": 1,
+        "modifiers": [],
+        "option_boxes": True,
+        "items":
+        [
+            {"label": "Vertices", "command": "mamtools.mel('ToggleVertices')", "position": "NW"},
+            {"optionBox": True, "command": "mamtools.mel('ChangeVertexSize')", "position": "NW"},
+            {"label": "Border Edges", "command": "mamtools.mel('ToggleBorderEdges')", "position": "SW"},
+            {"optionBox": True, "command": "mamtools.mel('ChangeEdgeWidth')", "position": "SW"},
+            {"label": "Shell Borders", "command": "mamtools.display.display_map_border()", "position": "W"},
+
+            {"label": "Backface Culling", "command": "mamtools.display.wireframe_backface_culling()", "position": "N"},
+            {"label": "Shaded on Backgroundd", "command": "mamtools.display.wireframe_on_bg_objects()", "position": "NE"},
+            {"label": "Shaded", "command": "mamtools.display.shaded_toggle()", "position": "E"},
+            {"label": "Wire on Shaded", "command": "mamtools.display.wireframe_on_shaded()", "position": "SE"},
+
+            {"label": "Toggle Grid", "command": "mamtools.mel('ToggleGrid')", "position": "S"},
+            {"label": "Reset Display", "command": "mamtools.mel('PolyDisplayReset')"},
+        ]
+    },
+    {
+        "name": "viewport_display_marking",
+        "marking_menu": True,
+        "button": 1,
+        "modifiers": ["shift"],
+        "option_boxes": True,
+        "items":
+        [
+            {"label": "Viewport No Lights", "command": "mamtools.display.toggle_lights('none')", "position": "NW"},
+            {"label": "Viewport Default Lights", "command": "mamtools.display.toggle_lights('default')", "position": "N"},
+            {"label": "Viewport Flat Lights", "command": "mamtools.display.toggle_lights('flat')", "position": "NE"},
+
+            {"label": "Viewport Default Material", "command": "mamtools.display.toggle_default_material()", "position": "W"},
+            {"label": "Viewport Anti Aliasing", "command": "mamtools.display.toggle_AA()", "position": "SE"},
+            {"label": "Viewport Occlusion", "command": "mamtools.display.toggle_occlusion()", "position": "SW"},
+            {"label": "Xray", "command": "mamtools.display.display_xray()", "position": "S"},
+            {"label": "Texture Toggle", "command": "mamtools.display.display_textures()", "position": "E"},
+        ]
+    },
+    {
+        "name": "mesh_object_marking",
+        "marking_menu": True,
+        "button": 1,
+        "modifiers": ["shift"],
+        "items":
+        [
+            {"label": "Quad Draw", "command": "mamtools.mel('dR_quadDrawTool')", "position": "N"},
+            {"label": "Cleanup", "command": "mamtools.mel('CleanupPolygonOptions')", "position": "E"},
+            {"label": "Reduce", "command": "mamtools.mel('ReducePolygonOptions')", "position": "S"},
+            {"label": "Sculpt", "command": "mamtools.mel('SculptGeometryTool')", "position": "W"},
+        ]
+    },
+    {
+        "name": "mesh_component_marking",
+        "marking_menu": True,
+        "button": 1,
+        "modifiers": ["shift"],
+        "items":
+        [
+            {"label": "Target Weld", "command": "mamtools.mel('MergeVertexTool')", "position": "N"},
+            {"label": "Add divisions", "command": "mamtools.mel('AddFaceDivisions')", "position": "NE"},
+            {"label": "Wedge", "command": "mamtools.mel('WedgePolygon')", "position": "E"},
+            {"label": "Average Vertices", "command": "mamtools.mel('performPolyAverageVertex 0')", "position": "S"},
+            {"label": "Edge Flow", "command": "mamtools.mel('PolyEditEdgeFlow')", "position": "W"},
+            {"label": "Slide Edge", "command": "mamtools.mel('SlideEdgeTool')", "position": "NW"},
+        ]
+    },
+    {
         "name": "delete_model_marking",
         "marking_menu": True,
         "button": 1,
-        "modifiers": ["ctrl"],
+        "modifiers": ["shift"],
         "items":
         [
 
@@ -18,34 +124,15 @@
         ]
     },
     {
-        "name": "delete_uvs_marking",
-        "marking_menu": True,
-        "button": 1,
-        "modifiers": ["ctrl"],
-        "items":
-        [
-            {"dividerLabel": "Empty", "divider": True, "position": "N"},
-            {"label": "Close", "command": "print('close')", "position": "S"}
-        ]
-    },
-    {
-        "name": "camera_marking",
-        "marking_menu": True,
-        "button": 1,
-        "modifiers": ["ctrl"],
-        "items":
-        [
-            {"label": "Reset Camera", "command": "mamtools.camera.reset_camera()", "position": "S"}
-        ]
-    },
-    {
         "name": "selection_model_marking",
         "marking_menu": True,
         "button": 1,
-        "modifiers": ["ctrl"],
+        "modifiers": ["shift"],
         "items":
         [
             {"label": "Fill Surrounded", "command": "mamselect.fill()", "position": "S"},
+            {"label": "Edge Ring", "command": "mamtools.mel('SelectEdgeRingSp')", "position": "W"},
+            {"label": "Edge Loop", "command": "mamtools.mel('SelectEdgeLoopSp')", "position": "E"},
             {
                 "label": "Select Non Quads",
                 "sub_menu":
@@ -70,7 +157,7 @@
         "name": "uvs_marking",
         "marking_menu": True,
         "button": 1,
-        "modifiers": ["ctrl"],
+        "modifiers": ["shift"],
         "items":
         [
             {
@@ -121,7 +208,7 @@
         "name": "sculpt_marking",
         "marking_menu": True,
         "button": 1,
-        "modifiers": ["ctrl"],
+        "modifiers": ["shift"],
         "items":
         [
             {"label": "Grab", "command": "mamtools.mel('setMeshSculptTool(\"Grab\")')", "position": "NE"},
@@ -130,6 +217,17 @@
             {"label": "Pinch", "command": "mamtools.mel('setMeshSculptTool(\"Pinch\")')", "position": "W"},
             {"label": "Freeze", "command": "mamtools.mel('setMeshSculptTool(\"Freeze\")')", "position": "S"},
             {"label": "Bulge", "command": "mamtools.mel('setMeshSculptTool(\"Bulge\")')", "position": "E"},
+        ]
+    },
+    {
+        "name": "utils_marking",
+        "marking_menu": False,
+        "button": 1,
+        "modifiers": [],
+        "items":
+        [
+            {"label": "Sort Outliner", "command": "mamtools.sort_outliner.outliner_sort()"},
+            {"label": "Reset Camera", "command": "mamtools.camera.reset_camera()", "position": "S"}
         ]
     },
 ]
