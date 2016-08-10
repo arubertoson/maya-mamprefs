@@ -85,6 +85,7 @@
         "items":
         [
             {"label": "Quad Draw", "command": "mamtools.mel('dR_quadDrawTool')", "position": "N"},
+            {"label": "Align", "command": "mamtools.mel('performAlignObjects 1;')", "position": "NE"},
             {"label": "Cleanup", "command": "mamtools.mel('CleanupPolygonOptions')", "position": "E"},
             {"label": "Reduce", "command": "mamtools.mel('ReducePolygonOptions')", "position": "S"},
             {"label": "Sculpt", "command": "mamtools.mel('SculptGeometryTool')", "position": "W"},
@@ -133,6 +134,7 @@
             {"label": "Fill Surrounded", "command": "mamselect.fill()", "position": "S"},
             {"label": "Edge Ring", "command": "mamtools.mel('SelectEdgeRingSp')", "position": "W"},
             {"label": "Edge Loop", "command": "mamtools.mel('SelectEdgeLoopSp')", "position": "E"},
+            {"label": "Flood Pattern", "command": "mamselect.pattern.flood()", "position": "NE"},
             {
                 "label": "Select Non Quads",
                 "sub_menu":
