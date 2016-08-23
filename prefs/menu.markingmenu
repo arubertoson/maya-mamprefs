@@ -6,17 +6,26 @@
         "modifiers": [],
         "items":
         [
-            {"label": "Set Normal Angle", "command": "mamtools.mel('polySoftEdgeWin')", "position": "N"},
-
-            {"label": "Unlock", "command": "mamtools.mel('polyNormalPerVertex -ufn true;')", "position": "NE"},
+            {
+                "label": "Face Weighted",
+                "position": "N",
+                "sub_menu":
+                [
+                    {"label": "Add to Set", "command": "mamtools.mesh.set_face_weighted_normals_sets(add=True)", "position": "W"},
+                    {"label": "Remove from Set", "command": "mamtools.mesh.set_face_weighted_normals_sets(add=False)", "position": "E"},
+                    {"label": "Face Weight Normals", "command": "mamtools.mesh.set_face_weighted_normals()", "position": "N"},
+                    {"label": "Select Faces in Sets", "command": "mamtools.mesh.display_face_weighted_normals_sets()", "position": "S"},
+                ]
+            },
+            {"label": "Unlock", "command": "mamtools.mel('polyNormalPerVertex -ufn true')", "position": "NE"},
             {"label": "Reverse", "command": "mamtools.mel('ReversePolygonNormals')", "position": "NW"},
-
             {"label": "Soften", "command": "mamtools.mel('SoftPolyEdgeElements 1')", "position": "W"},
             {"label": "Harden", "command": "mamtools.mel('SoftPolyEdgeElements 0')", "position": "E"},
-
             {"label": "Display Hard", "command": "mamtools.mel('TogglePolyDisplayHardEdges')", "position": "SE"},
             {"label": "Display Soft", "command": "mamtools.mel('TogglePolyDisplaySoftEdges')", "position": "SW"},
             {"label": "Display Standard", "command": "mamtools.mel('TogglePolyDisplayEdges')", "position": "S"},
+
+            {"label": "Set Normal Angle", "command": "mamtools.mel('polySoftEdgeWin')"},
             {"label": "Vertex Normals", "command": "mamtools.mel('ToggleVertexNormalDisplay')"},
         ]
     },
@@ -29,7 +38,7 @@
         [
             {"label": "Flatten Averaged", "command": "mamtools.mesh.flatten(averaged=True)", "position": "NW"},
             {"label": "Flatten", "command": "mamtools.mesh.flatten(averaged=False)", "position": "NE"},
-            {"label": "Make Circle", "command": "mamtools.mesh.make_circle()", "position": "N"},
+            {"label": "Make Circle", "command": "mamtools.mesh.draw_circle()", "position": "N"},
             {"label": "Center Pivot", "command": "mamtools.pivots.set_pivot_center()", "position": "S"},
             {"label": "Match Pivot to Object", "command": "mamtools.pivots.match_pivot_to_object()", "position": "SE"},
             {"label": "Bake Pivot", "command": "mamtools.pivots.bake_pivot()", "position": "SW"},
@@ -148,9 +157,13 @@
                 "position": "N",
                 "sub_menu":
                 [
-                    {"label": "Contiguouse", "command": "mamselect.coplanar.contiguous(context=False)", "position": "N"},
-                    {"label": "Hilited", "command": "mamselect.coplanar.hilited(context=False)", "position": "NE"},
-                    {"label": "Object", "command": "mamselect.coplanar.object(context=False)", "position": "NW"},
+                    {"label": "Contiguouse", "command": "mamselect.coplanar.contiguous(context=False, add=True)", "position": "N"},
+                    {"label": "Hilited", "command": "mamselect.coplanar.hilited(context=False, add=True)", "position": "NE"},
+                    {"label": "Object", "command": "mamselect.coplanar.object(context=False, add=True)", "position": "NW"},
+
+                    {"label": "Contiguouse Ctx", "command": "mamselect.coplanar.contiguous(context=True)", "position": "S"},
+                    {"label": "Hilited Ctx", "command": "mamselect.coplanar.hilited(context=True)", "position": "SE"},
+                    {"label": "Object Ctx", "command": "mamselect.coplanar.object(context=True)", "position": "SW"},
                 ]
             }
         ]
