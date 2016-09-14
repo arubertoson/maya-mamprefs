@@ -11,22 +11,22 @@
                 "position": "N",
                 "sub_menu":
                 [
-                    {"label": "Add to Set", "command": "mamtools.mesh.set_face_weighted_normals_sets(add=True)", "position": "W"},
-                    {"label": "Remove from Set", "command": "mamtools.mesh.set_face_weighted_normals_sets(add=False)", "position": "E"},
-                    {"label": "Face Weight Normals", "command": "mamtools.mesh.set_face_weighted_normals()", "position": "N"},
-                    {"label": "Select Faces in Sets", "command": "mamtools.mesh.display_face_weighted_normals_sets()", "position": "S"},
+                    {"label": "Add to Set", "command": "mamt.mesh.set_face_weighted_normals_sets(add=True)", "position": "W"},
+                    {"label": "Remove from Set", "command": "mamt.mesh.set_face_weighted_normals_sets(add=False)", "position": "E"},
+                    {"label": "Face Weight Normals", "command": "mamt.mesh.set_face_weighted_normals()", "position": "N"},
+                    {"label": "Select Faces in Sets", "command": "mamt.mesh.display_face_weighted_normals_sets()", "position": "S"},
                 ]
             },
-            {"label": "Unlock", "command": "mamtools.mel('polyNormalPerVertex -ufn true')", "position": "NE"},
-            {"label": "Reverse", "command": "mamtools.mel('ReversePolygonNormals')", "position": "NW"},
-            {"label": "Soften", "command": "mamtools.mel('SoftPolyEdgeElements 1')", "position": "W"},
-            {"label": "Harden", "command": "mamtools.mel('SoftPolyEdgeElements 0')", "position": "E"},
-            {"label": "Display Hard", "command": "mamtools.mel('TogglePolyDisplayHardEdges')", "position": "SE"},
-            {"label": "Display Soft", "command": "mamtools.mel('TogglePolyDisplaySoftEdges')", "position": "SW"},
-            {"label": "Display Standard", "command": "mamtools.mel('TogglePolyDisplayEdges')", "position": "S"},
+            {"label": "Unlock", "command": "maya.mel.eval('polyNormalPerVertex -ufn true')", "position": "NE"},
+            {"label": "Reverse", "command": "maya.mel.eval('ReversePolygonNormals')", "position": "NW"},
+            {"label": "Soften", "command": "maya.mel.eval('SoftPolyEdgeElements 1')", "position": "W"},
+            {"label": "Harden", "command": "maya.mel.eval('SoftPolyEdgeElements 0')", "position": "E"},
+            {"label": "Display Hard", "command": "maya.mel.eval('TogglePolyDisplayHardEdges')", "position": "SE"},
+            {"label": "Display Soft", "command": "maya.mel.eval('TogglePolyDisplaySoftEdges')", "position": "SW"},
+            {"label": "Display Standard", "command": "maya.mel.eval('TogglePolyDisplayEdges')", "position": "S"},
 
-            {"label": "Set Normal Angle", "command": "mamtools.mel('polySoftEdgeWin')"},
-            {"label": "Vertex Normals", "command": "mamtools.mel('ToggleVertexNormalDisplay')"},
+            {"label": "Set Normal Angle", "command": "maya.mel.eval('polySoftEdgeWin')"},
+            {"label": "Vertex Normals", "command": "maya.mel.eval('ToggleVertexNormalDisplay')"},
         ]
     },
     {
@@ -36,12 +36,12 @@
         "modifiers": [],
         "items":
         [
-            {"label": "Flatten Averaged", "command": "mamtools.mesh.flatten(averaged=True)", "position": "NW"},
-            {"label": "Flatten", "command": "mamtools.mesh.flatten(averaged=False)", "position": "NE"},
-            {"label": "Make Circle", "command": "mamtools.mesh.draw_circle()", "position": "N"},
-            {"label": "Center Pivot", "command": "mamtools.pivots.set_pivot_center()", "position": "S"},
-            {"label": "Match Pivot to Object", "command": "mamtools.pivots.match_pivot_to_object()", "position": "SE"},
-            {"label": "Bake Pivot", "command": "mamtools.pivots.bake_pivot()", "position": "SW"},
+            {"label": "Flatten Averaged", "command": "mamt.mesh.flatten(averaged=True)", "position": "NW"},
+            {"label": "Flatten", "command": "mamt.mesh.flatten(averaged=False)", "position": "NE"},
+            {"label": "Make Circle", "command": "mamt.mesh.draw_circle()", "position": "N"},
+            {"label": "Center Pivot", "command": "mamt.pivots.set_pivot_center()", "position": "S"},
+            {"label": "Match Pivot to Object", "command": "mamt.pivots.match_pivot_to_object()", "position": "SE"},
+            {"label": "Bake Pivot", "command": "mamt.pivots.bake_pivot()", "position": "SW"},
         ]
     },
     {
@@ -52,19 +52,19 @@
         "option_boxes": True,
         "items":
         [
-            {"label": "Vertices", "command": "mamtools.mel('ToggleVertices')", "position": "NW"},
-            {"optionBox": True, "command": "mamtools.mel('ChangeVertexSize')", "position": "NW"},
-            {"label": "Border Edges", "command": "mamtools.mel('ToggleBorderEdges')", "position": "SW"},
-            {"optionBox": True, "command": "mamtools.mel('ChangeEdgeWidth')", "position": "SW"},
-            {"label": "Shell Borders", "command": "mamtools.display.display_map_border()", "position": "W"},
+            {"label": "Vertices", "command": "maya.mel.eval('ToggleVertices')", "position": "NW"},
+            {"optionBox": True, "command": "maya.mel.eval('ChangeVertexSize')", "position": "NW"},
+            {"label": "Border Edges", "command": "maya.mel.eval('ToggleBorderEdges')", "position": "SW"},
+            {"optionBox": True, "command": "maya.mel.eval('ChangeEdgeWidth')", "position": "SW"},
+            {"label": "Shell Borders", "command": "mamt.display.display_map_border()", "position": "W"},
 
-            {"label": "Backface Culling", "command": "mamtools.display.wireframe_backface_culling()", "position": "N"},
-            {"label": "Shaded on Backgroundd", "command": "mamtools.display.wireframe_on_bg_objects()", "position": "NE"},
-            {"label": "Shaded", "command": "mamtools.display.shaded_toggle()", "position": "E"},
-            {"label": "Wire on Shaded", "command": "mamtools.display.wireframe_on_shaded()", "position": "SE"},
+            {"label": "Backface Culling", "command": "mamt.display.wireframe_backface_culling()", "position": "N"},
+            {"label": "Shaded on Backgroundd", "command": "mamt.display.wireframe_on_bg_objects()", "position": "NE"},
+            {"label": "Shaded", "command": "mamt.display.shaded_toggle()", "position": "E"},
+            {"label": "Wire on Shaded", "command": "mamt.display.wireframe_on_shaded()", "position": "SE"},
 
-            {"label": "Toggle Grid", "command": "mamtools.mel('ToggleGrid')", "position": "S"},
-            {"label": "Reset Display", "command": "mamtools.mel('PolyDisplayReset')"},
+            {"label": "Toggle Grid", "command": "maya.mel.eval('ToggleGrid')", "position": "S"},
+            {"label": "Reset Display", "command": "maya.mel.eval('PolyDisplayReset')"},
         ]
     },
     {
@@ -75,15 +75,15 @@
         "option_boxes": True,
         "items":
         [
-            {"label": "Viewport No Lights", "command": "mamtools.display.toggle_lights('none')", "position": "NW"},
-            {"label": "Viewport Default Lights", "command": "mamtools.display.toggle_lights('default')", "position": "N"},
-            {"label": "Viewport Flat Lights", "command": "mamtools.display.toggle_lights('flat')", "position": "NE"},
+            {"label": "Viewport No Lights", "command": "mamt.display.toggle_lights('none')", "position": "NW"},
+            {"label": "Viewport Default Lights", "command": "mamt.display.toggle_lights('default')", "position": "N"},
+            {"label": "Viewport Flat Lights", "command": "mamt.display.toggle_lights('flat')", "position": "NE"},
 
-            {"label": "Viewport Default Material", "command": "mamtools.display.toggle_default_material()", "position": "W"},
-            {"label": "Viewport Anti Aliasing", "command": "mamtools.display.toggle_AA()", "position": "SE"},
-            {"label": "Viewport Occlusion", "command": "mamtools.display.toggle_occlusion()", "position": "SW"},
-            {"label": "Xray", "command": "mamtools.display.display_xray()", "position": "S"},
-            {"label": "Texture Toggle", "command": "mamtools.display.display_textures()", "position": "E"},
+            {"label": "Viewport Default Material", "command": "mamt.display.toggle_default_material()", "position": "W"},
+            {"label": "Viewport Anti Aliasing", "command": "mamt.display.toggle_AA()", "position": "SE"},
+            {"label": "Viewport Occlusion", "command": "mamt.display.toggle_occlusion()", "position": "SW"},
+            {"label": "Xray", "command": "mamt.display.display_xray()", "position": "S"},
+            {"label": "Texture Toggle", "command": "mamt.display.display_textures()", "position": "E"},
         ]
     },
     {
@@ -93,11 +93,11 @@
         "modifiers": ["shift"],
         "items":
         [
-            {"label": "Quad Draw", "command": "mamtools.mel('dR_quadDrawTool')", "position": "N"},
-            {"label": "Align", "command": "mamtools.mel('performAlignObjects 1;')", "position": "NE"},
-            {"label": "Cleanup", "command": "mamtools.mel('CleanupPolygonOptions')", "position": "E"},
-            {"label": "Reduce", "command": "mamtools.mel('ReducePolygonOptions')", "position": "S"},
-            {"label": "Sculpt", "command": "mamtools.mel('SculptGeometryTool')", "position": "W"},
+            {"label": "Quad Draw", "command": "maya.mel.eval('dR_quadDrawTool')", "position": "N"},
+            {"label": "Align", "command": "maya.mel.eval('performAlignObjects 1;')", "position": "NE"},
+            {"label": "Cleanup", "command": "maya.mel.eval('CleanupPolygonOptions')", "position": "E"},
+            {"label": "Reduce", "command": "maya.mel.eval('ReducePolygonOptions')", "position": "S"},
+            {"label": "Sculpt", "command": "maya.mel.eval('SculptGeometryTool')", "position": "W"},
         ]
     },
     {
@@ -107,12 +107,12 @@
         "modifiers": ["shift"],
         "items":
         [
-            {"label": "Target Weld", "command": "mamtools.mel('MergeVertexTool')", "position": "N"},
-            {"label": "Add divisions", "command": "mamtools.mel('AddFaceDivisions')", "position": "NE"},
-            {"label": "Wedge", "command": "mamtools.mel('WedgePolygon')", "position": "E"},
-            {"label": "Average Vertices", "command": "mamtools.mel('performPolyAverageVertex 0')", "position": "S"},
-            {"label": "Edge Flow", "command": "mamtools.mel('PolyEditEdgeFlow')", "position": "W"},
-            {"label": "Slide Edge", "command": "mamtools.mel('SlideEdgeTool')", "position": "NW"},
+            {"label": "Target Weld", "command": "maya.mel.eval('MergeVertexTool')", "position": "N"},
+            {"label": "Add divisions", "command": "maya.mel.eval('AddFaceDivisions')", "position": "NE"},
+            {"label": "Wedge", "command": "maya.mel.eval('WedgePolygon')", "position": "E"},
+            {"label": "Average Vertices", "command": "maya.mel.eval('performPolyAverageVertex 0')", "position": "S"},
+            {"label": "Edge Flow", "command": "maya.mel.eval('PolyEditEdgeFlow')", "position": "W"},
+            {"label": "Slide Edge", "command": "maya.mel.eval('SlideEdgeTool')", "position": "NW"},
         ]
     },
     {
@@ -123,13 +123,13 @@
         "items":
         [
 
-            {"label": "Freeze Translate", "command": "mamtools.delete.transforms(translate=True)", "position": "N"},
-            {"label": "Freeze Rotate", "command": "mamtools.delete.transforms(rotate=True)", "position": "NE"},
-            {"label": "Freeze Scale", "command": "mamtools.delete.transforms(scale=True)", "position": "NW"},
-            {"label": "history", "command": "mamtools.delete.history()", "position": "S"},
+            {"label": "Freeze Translate", "command": "mamt.delete.transforms(translate=True)", "position": "N"},
+            {"label": "Freeze Rotate", "command": "mamt.delete.transforms(rotate=True)", "position": "NE"},
+            {"label": "Freeze Scale", "command": "mamt.delete.transforms(scale=True)", "position": "NW"},
+            {"label": "history", "command": "mamt.delete.history()", "position": "S"},
 
-            {"label": "Freeze All", "command": "mamtools.delete.transforms(True, True, True)"},
-            {"label": "Unbevel", "command": "mamtools.delete.unbevel()"},
+            {"label": "Freeze All", "command": "mamt.delete.transforms(True, True, True)"},
+            {"label": "Unbevel", "command": "mamt.delete.unbevel()"},
 
         ]
     },
@@ -140,16 +140,16 @@
         "modifiers": ["shift"],
         "items":
         [
-            {"label": "Fill Surrounded", "command": "mamselect.fill()", "position": "S"},
-            {"label": "Edge Ring", "command": "mamtools.mel('SelectEdgeRingSp')", "position": "W"},
-            {"label": "Edge Loop", "command": "mamtools.mel('SelectEdgeLoopSp')", "position": "E"},
-            {"label": "Flood Pattern", "command": "mamselect.pattern.flood()", "position": "NE"},
+            {"label": "Fill Surrounded", "command": "mamt.select.fill()", "position": "S"},
+            {"label": "Edge Ring", "command": "maya.mel.eval('SelectEdgeRingSp')", "position": "W"},
+            {"label": "Edge Loop", "command": "maya.mel.eval('SelectEdgeLoopSp')", "position": "E"},
+            {"label": "Flood Pattern", "command": "mamt.select.pattern.flood()", "position": "NE"},
             {
                 "label": "Select Non Quads",
                 "sub_menu":
                 [
-                    {"label": "Tris", "command": "mamselect.mesh.nonquads(False)"},
-                    {"label": "NGons", "command": "mamselect.mesh.nonquads(True)"},
+                    {"label": "Tris", "command": "mamt.select.mesh.nonquads(False)"},
+                    {"label": "NGons", "command": "mamt.select.mesh.nonquads(True)"},
                 ]
             },
             {
@@ -157,13 +157,13 @@
                 "position": "N",
                 "sub_menu":
                 [
-                    {"label": "Contiguouse", "command": "mamselect.coplanar.contiguous(context=False, add=True)", "position": "N"},
-                    {"label": "Hilited", "command": "mamselect.coplanar.hilited(context=False, add=True)", "position": "NE"},
-                    {"label": "Object", "command": "mamselect.coplanar.object(context=False, add=True)", "position": "NW"},
+                    {"label": "Contiguouse", "command": "mamt.select.coplanar.contiguous(context=False, add=True)", "position": "N"},
+                    {"label": "Hilited", "command": "mamt.select.coplanar.hilited(context=False, add=True)", "position": "NE"},
+                    {"label": "Object", "command": "mamt.select.coplanar.object(context=False, add=True)", "position": "NW"},
 
-                    {"label": "Contiguouse Ctx", "command": "mamselect.coplanar.contiguous(context=True)", "position": "S"},
-                    {"label": "Hilited Ctx", "command": "mamselect.coplanar.hilited(context=True)", "position": "SE"},
-                    {"label": "Object Ctx", "command": "mamselect.coplanar.object(context=True)", "position": "SW"},
+                    {"label": "Contiguouse Ctx", "command": "mamt.select.coplanar.contiguous(context=True)", "position": "S"},
+                    {"label": "Hilited Ctx", "command": "mamt.select.coplanar.hilited(context=True)", "position": "SE"},
+                    {"label": "Object Ctx", "command": "mamt.select.coplanar.object(context=True)", "position": "SW"},
                 ]
             }
         ]
@@ -180,10 +180,10 @@
                 "position": "N",
                 "sub_menu":
                 [
-                    {"label": "Left", "command": "mamuvs.align('minu')", "position": "W"},
-                    {"label": "Right", "command": "mamuvs.align('maxu')", "position": "E"},
-                    {"label": "Top", "command": "mamuvs.align('maxv')", "position": "N"},
-                    {"label": "Bottom", "command": "mamuvs.align('minv')", "position": "S"},
+                    {"label": "Left", "command": "mamt.map.align('minu')", "position": "W"},
+                    {"label": "Right", "command": "mamt.map.align('maxu')", "position": "E"},
+                    {"label": "Top", "command": "mamt.map.align('maxv')", "position": "N"},
+                    {"label": "Bottom", "command": "mamt.map.align('minv')", "position": "S"},
                 ]
             },
             {
@@ -191,8 +191,8 @@
                 "position": "NW",
                 "sub_menu":
                 [
-                    {"label": "u", "command": "mamuvs.distribute('u')", "position": "W"},
-                    {"label": "v", "command": "mamuvs.distribute('v')", "position": "N"},
+                    {"label": "u", "command": "mamt.map.distribute('u')", "position": "W"},
+                    {"label": "v", "command": "mamt.map.distribute('v')", "position": "N"},
                 ]
             },
             {
@@ -200,9 +200,9 @@
                 "position": "NE",
                 "sub_menu":
                 [
-                    {"label": "u", "command": "mamuvs.space('u')", "position": "E"},
-                    {"label": "v", "command": "mamuvs.space('v')", "position": "N"},
-                    {"label": "Set Spacing", "command": "mamuvs.set_space()", "position": "N"},
+                    {"label": "u", "command": "mamt.map.space('u')", "position": "E"},
+                    {"label": "v", "command": "mamt.map.space('v')", "position": "N"},
+                    {"label": "Set Spacing", "command": "mamt.map.set_space()", "position": "N"},
                 ]
             },
             {
@@ -210,13 +210,13 @@
                 "position": "W",
                 "sub_menu":
                 [
-                    {"label": "Max Horizontal", "command": "mamuvs.scalefit('maxu')", "position": "E"},
-                    {"label": "Min Horizontal", "command": "mamuvs.scalefit('minu')", "position": "W"},
-                    {"label": "Max Vertical", "command": "mamuvs.scalefit('maxv')", "position": "N"},
-                    {"label": "Min Veritcal", "command": "mamuvs.scalefit('minv')", "position": "S"},
+                    {"label": "Max Horizontal", "command": "mamt.map.scalefit('maxu')", "position": "E"},
+                    {"label": "Min Horizontal", "command": "mamt.map.scalefit('minu')", "position": "W"},
+                    {"label": "Max Vertical", "command": "mamt.map.scalefit('maxv')", "position": "N"},
+                    {"label": "Min Veritcal", "command": "mamt.map.scalefit('minv')", "position": "S"},
                 ]
             },
-            {"label": "Texel Density", "command": "mamuvs.texel.init()"},
+            {"label": "Texel Density", "command": "mamt.map.texel.init()"},
         ]
     },
     {
@@ -226,12 +226,12 @@
         "modifiers": ["shift"],
         "items":
         [
-            {"label": "Grab", "command": "mamtools.mel('setMeshSculptTool(\"Grab\")')", "position": "NE"},
-            {"label": "Wax", "command": "mamtools.mel('setMeshSculptTool(\"Wax\")')", "position": "N"},
-            {"label": "Flatten", "command": "mamtools.mel('setMeshSculptTool(\"Flatten\")')", "position": "NW"},
-            {"label": "Pinch", "command": "mamtools.mel('setMeshSculptTool(\"Pinch\")')", "position": "W"},
-            {"label": "Freeze", "command": "mamtools.mel('setMeshSculptTool(\"Freeze\")')", "position": "S"},
-            {"label": "Bulge", "command": "mamtools.mel('setMeshSculptTool(\"Bulge\")')", "position": "E"},
+            {"label": "Grab", "command": "maya.mel.eval('setMeshSculptTool(\"Grab\")')", "position": "NE"},
+            {"label": "Wax", "command": "maya.mel.eval('setMeshSculptTool(\"Wax\")')", "position": "N"},
+            {"label": "Flatten", "command": "maya.mel.eval('setMeshSculptTool(\"Flatten\")')", "position": "NW"},
+            {"label": "Pinch", "command": "maya.mel.eval('setMeshSculptTool(\"Pinch\")')", "position": "W"},
+            {"label": "Freeze", "command": "maya.mel.eval('setMeshSculptTool(\"Freeze\")')", "position": "S"},
+            {"label": "Bulge", "command": "maya.mel.eval('setMeshSculptTool(\"Bulge\")')", "position": "E"},
         ]
     },
     {
@@ -241,8 +241,8 @@
         "modifiers": [],
         "items":
         [
-            {"label": "Sort Outliner", "command": "mamtools.sort_outliner.outliner_sort()"},
-            {"label": "Reset Camera", "command": "mamtools.camera.reset_camera()", "position": "S"}
+            {"label": "Sort Outliner", "command": "mamt.sort_outliner.outliner_sort()"},
+            {"label": "Reset Camera", "command": "mamt.camera.reset_camera()", "position": "S"}
         ]
     },
 ]
